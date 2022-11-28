@@ -36,7 +36,7 @@ UDEMY ile 16.5 saatlik "Microcontroller Embedded C Programming: Absolute Beginne
 Kariyer.net techcareer aracılığı ile 45 saat Aykut Taşdelen anlatımıyla online Embedded Bootcamp eğitimi alıp proje tamamladım.(24.10.2022 - 18.11.2022)
 https://github.com/lutfullah2011/Embedded-Bootcamp-Project.git
 
-<<<<<< UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.(28.11.2022) >>>>>>
+<<<<<<<<<<<<<<<<<<<                                                                                                                                                      UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.(28.11.2022)                                          >>>>>>>>>>>>>>>>>>>
 
 
 
