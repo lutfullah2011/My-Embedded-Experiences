@@ -7,9 +7,12 @@
 (20.08.2022) - (20.11.2022) ~= 450 saat emek verildi.                                                                                                                    
 
 *Bütün uygulamalarım esnasında STM32VL DISCOVERY kart kullanıldı.                                                                                                        
-*Uygulamalar ilk başta KEIL IDE ,sonrasında STM32CUBE IDE ile gerçekleştirildi.                                                                                          
+*Uygulamalar ilk başta KEIL IDE ,sonrasında STM32CUBE IDE ile gerçekleştirildi.                                                                                           
+*Kariyer.net techcareer aracılığı ile 45 saat Aykut Taşdelen anlatımıyla online Embedded Bootcamp eğitimi alıp proje tamamladım.                                        (24.10.2022 - 18.11.2022) https://github.com/lutfullah2011/Embedded-Bootcamp-Project.git                                                                                
+*UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.Eğitime ve uygulamaya devam(28.11.2022)
 
 ***********************************************************************************************************************************************************************
+
 
 
 @@@@@@@@@@@@@@@@
@@ -31,12 +34,10 @@ https://www.edx.org/course/embedded-systems-essentials-with-arm-getting-started
 "C Programming for Embedded Applications" kursu // linkedin LEARNİNG 2 saat civarı //
 https://www.linkedin.com/learning/c-programming-for-embedded-applications-14537235/integral-types?autoplay=true
 
-UDEMY ile 16.5 saatlik "Microcontroller Embedded C Programming: Absolute Beginners" kursunu başarıyla tamamladım.(16.10.2022)
+UDEMY ile 16.5 saatlik "Microcontroller Embedded C Programming: Absolute Beginners" kursunu başarıyla tamamladım.(16.10.2022)https://www.udemy.com/course/microcontroller-embedded-c-programming/
 
-Kariyer.net techcareer aracılığı ile 45 saat Aykut Taşdelen anlatımıyla online Embedded Bootcamp eğitimi alıp proje tamamladım.(24.10.2022 - 18.11.2022)
-https://github.com/lutfullah2011/Embedded-Bootcamp-Project.git
 
-<<<<<<<<<<<<<<<<<<<                                                                                                                                                      UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.(28.11.2022)                                          >>>>>>>>>>>>>>>>>>>
+<<<<<<<<<<<<<<<<<<<                                                                                                                                                      UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.(28.11.2022)                                               https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/ >>>>>>>>>>>>>>>>>>>
 
 
 
