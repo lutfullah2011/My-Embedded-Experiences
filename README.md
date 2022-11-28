@@ -14,7 +14,7 @@
 ***********************************************************************************************************************************************************************
 
 
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 @@@@@@@@@@@@@@@@
 GÖMÜLÜ SİSTEMLER
 @@@@@@@@@@@@@@@@
@@ -40,7 +40,7 @@ UDEMY ile 16.5 saatlik "Microcontroller Embedded C Programming: Absolute Beginne
 <<<<<<<<<<<<<<<<<<<                                                                                                                                                      UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.(28.11.2022)                                               https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/ >>>>>>>>>>>>>>>>>>>
 
 
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 @@@@@@@@@@@@@
 C PROGRAMLAMA
 @@@@@@@@@@@@@
