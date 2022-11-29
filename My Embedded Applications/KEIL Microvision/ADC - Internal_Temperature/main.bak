@@ -1,0 +1,147 @@
+#include "stm32f10x.h"                  // Device header
+#include "stm32f10x_adc.h"              // Keil::Device:StdPeriph Drivers:ADC
+
+//Yari REGISTER yari std library kullanarak internal temp okuma Uygulamasi
+
+uint16_t Vsense=0; 
+float V25=1.50; //V25=Vsense at 25 degrees , 25 derecedeki voltaj degeri(typical value:0.76 veya 1.43).
+
+float temp_voltage;
+float temperature; //temperature={(V25-Vsense)/Avg_Slope}+25 ;
+
+void gpioConfig()
+{
+	GPIO_InitTypeDef gpio_Initstruct;
+	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);//adc hatti 
+	
+	gpio_Initstruct.GPIO_Mode=GPIO_Mode_Out_PP;
+  gpio_Initstruct.GPIO_Pin=GPIO_Pin_8|GPIO_Pin_9|GPIO_Pin_10;
+  gpio_Initstruct.GPIO_Speed=GPIO_Speed_50MHz;
+	GPIO_Init(GPIOC,&gpio_Initstruct);
+	
+	 // Internal Temperature Sensor GPIO Init
+   GPIOA->CRH &= ~(15<<28);// ~(0000 1111) 28 kere shift,16. channel ,gpio_Initstruct.GPIO_Mode=GPIO_Mode_AIN;
+   //gpio_Initstruct.GPIO_Pin=GPIO_Pin_1; //	ADC1_IN16;
+   //GPIO_Init(GPIOA,&gpio_Initstruct);
+	
+}
+
+
+void delay(uint32_t time)
+{
+	while(time--);		
+}
+
+void adcConfig()
+{
+	 ADC_InitTypeDef ADCInitStructure;
+	
+   RCC->APB2ENR |= (1<<9); // 9. biti set ettim. ADC1 Clock aktif:) //RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1,ENABLE);	
+	
+	 ADCInitStructure.ADC_ContinuousConvMode=ENABLE;
+   ADC1->CR2 &= ~(1<<11);	// CR2 align 11. bit 0.   ADCInitStructure.ADC_DataAlign=ADC_DataAlign_Right; //ADCInitStructure.ADC_DataAlign=ADC_DataAlign_Right;
+   ADCInitStructure.ADC_ExternalTrigConv=ADC_ExternalTrigConv_None;
+   ADCInitStructure.ADC_Mode=ADC_Mode_Independent;
+   ADCInitStructure.ADC_NbrOfChannel=1;
+   ADCInitStructure.ADC_ScanConvMode=DISABLE;
+   
+   ADC_Init(ADC1,&ADCInitStructure);
+   ADC1->CR2 |= 1; // Debug ederken Zaten aktif olmus olarak gördüm. ADON biti enabled == ADC_Cmd(ADC1,ENABLE);
+   delay(10); //conversion baslatmak icin 1.17 us civari beklenir
+	
+	// temp ve vref degerini bul, 162 sayfada kaldin.
+
+	
+   ADC1->CR2 |= (1<<23);//23. BIT enabled,temperature sensor //ADC_TempSensorVrefintCmd(ENABLE); 	//bu dogrumu bilmiyorum = ADC_CR2_TSVREFE |= (1<<23);
+	
+}
+
+
+
+//#define ADC_Channel_TempSensor  ((uint8_t)ADC_Channel_16)
+
+uint16_t readADC()
+{
+	 ADC1->SMPR1 |= (5<<18);// Channel16 sample time set 55.5 CYCLE(101) in the 18-19-20 bits. it says 17.1 us is enough
+   ADC1->SQR3  |= (((uint8_t)0x10)<<0); //select channel 16 for ADC1 //(0001 0000<<0) veya (16<<0), rank 1 icin 0 kere shift ettik.
+   //ADC_RegularChannelConfig(ADC1,ADC_Channel_16,1,ADC_SampleTime_55Cycles5);
+	
+	
+   ADC1->CR2 |= (1<<22);//"Start conversion of regular channels" & "External trigger conversion mode for regular channels" == "0000 0101" shifted 22 times  ADC_SoftwareStartConvCmd(ADC1,ENABLE);
+	 ADC1->CR2 |= (1<<20); // ADC_SoftwareStartConvCmd(ADC1,ENABLE);
+	
+   while(!(ADC1->SR & 2));// 0 dan farkli her deger TRUE döner.  SR registerin 2. biti end of conversion biti 1 mi kontrol ediliyor. 
+	 //while(ADC_GetFlagStatus(ADC1,ADC_FLAG_EOC)==RESET);
+   
+	 return (uint16_t) ADC1->DR;//   return ADC_GetConversionValue(ADC1);
+
+}
+
+////Get the value of ADC sampling internal temperature sensor
+////Take 10 times, then average
+//uint16_t GetTemp(void)
+//	{ 
+//	uint16_t temp_val=0;
+//	uint8_t t;
+//	for(t=0;t<10;t++)
+//		{
+//		temp_val+=readADC();	  //TempSensor
+//		delay(500);
+//		}
+//	return temp_val/10;
+//	}
+//	
+//	
+	
+	
+
+
+
+
+//Avg_Slope=the average slope of temperature versus Vsense curve (in mv/C or uv/C) (typical value is 4.3Mv/C).
+
+//With the above formula, we can easily calculate the temperature of the current temperature sensor.
+
+
+
+int main()
+{
+	gpioConfig();
+	adcConfig();
+	
+	while(1){
+		
+		Vsense=readADC();
+ 		temp_voltage=(float)Vsense*(3.3/4095);
+//		temperature=temp_voltage; //Preserve the voltage value of the temperature sensor
+//		Vsense=temp_voltage;
+//		temp-=(u8)temp;				    			//Minus the integer part		  
+ 		temperature=(V25-temp_voltage)/0.0043+25;	// V25 =1.46 //0.76 	//Calculate the current temperature value	 //Temperature={(V25-Vsense)/Avg_Slope}+25 ; Avg_Slope=4.3 mV
+//		temperature =(unsigned)temperature;	  
+		delay(250);
+		
+		if(temperature>=20 && temperature<30){
+         GPIO_SetBits(GPIOC,GPIO_Pin_8);
+         GPIO_ResetBits(GPIOC,GPIO_Pin_9 | GPIO_Pin_10);
+      
+      }
+    else if(temperature>=30 && temperature<35){
+         GPIO_SetBits(GPIOC,GPIO_Pin_9);
+         //GPIO_ResetBits(GPIOB,GPIO_Pin_2);
+          GPIO_ResetBits(GPIOC,GPIO_Pin_8 | GPIO_Pin_10);
+      
+      }
+		else if(temperature>=35 && temperature<50){
+         GPIO_SetBits(GPIOC,GPIO_Pin_10);
+         GPIO_ResetBits(GPIOC,GPIO_Pin_8 | GPIO_Pin_9);
+      }
+		 else	{
+			 GPIO_SetBits(GPIOC,GPIO_Pin_8 | GPIO_Pin_9|GPIO_Pin_10);
+//			 delay(25000000);
+//			 GPIO_ResetBits(GPIOC,GPIO_Pin_8 | GPIO_Pin_9|GPIO_Pin_10); 
+		 }
+	}
+	
+}
