@@ -16,7 +16,7 @@
  ******************************************************************************
  */
 
-//NVIC adresini bulamadım veya yanlış yerdeyim. Proje yarım kaldı
+//NVIC adresini bulamadım veya yanlış yerdeyim. Proje yarım kaldı //Ufak güncelleme: NVIC registerları Arm'ın kendi işlemcileriyle ilgili dosyalarda!!
 
 #include <stdint.h>
 #include <stdio.h>
