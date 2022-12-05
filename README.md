@@ -9,7 +9,7 @@
 *Bütün uygulamalarım esnasında STM32VL DISCOVERY kart kullanıldı.                                                                                                        
 *Uygulamalar ilk başta KEIL IDE ,sonrasında STM32CUBE IDE ile gerçekleştirildi.                                                                                                                                                                                                                                                                  
 *Kariyer.net techcareer aracılığı ile 45 saat Aykut Taşdelen anlatımıyla online Embedded Bootcamp eğitimi alıp proje tamamladım.                                        (24.10.2022 - 18.11.2022) https://github.com/lutfullah2011/Embedded-Bootcamp-Project.git                                                                                                                                                                                                                                                                                                                                       
-*UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.Eğitime ve uygulamaya devam(28.11.2022)                    https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/
+*UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.Eğitime ve uygulamaya devam(05.12.2022)                    https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/
 
 ***********************************************************************************************************************************************************************
 
@@ -37,7 +37,7 @@ https://www.linkedin.com/learning/c-programming-for-embedded-applications-145372
 UDEMY ile 16.5 saatlik "Microcontroller Embedded C Programming: Absolute Beginners" kursunu başarıyla tamamladım.(16.10.2022)https://www.udemy.com/course/microcontroller-embedded-c-programming/
 
 
-<<<<<<<<<<<<<<<<<<<                                                                                                                                                      UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.(28.11.2022)                                               https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/ >>>>>>>>>>>>>>>>>>>
+<<<<<<<<<<<<<<<<<<<                                                                                                                                                      UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %40'ı tamamlandı.(05.12.2022)                                               https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/ >>>>>>>>>>>>>>>>>>>
 
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
