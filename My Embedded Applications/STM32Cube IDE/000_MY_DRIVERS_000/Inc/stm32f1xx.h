@@ -72,7 +72,7 @@
  */
 typedef struct
 {
-	__vo uint32_t CRL;			/* Configuration register low	 Adress offset: 0x00 */
+    __vo uint32_t CRL;			/* Configuration register low	 Adress offset: 0x00 */
     __vo uint32_t CRH;			/* Configuration register high	 Adress offset: 0x04 */
     __vo uint32_t IDR;			/* Input data register			 Adress offset: 0x08 */
     __vo uint32_t ODR;			/* Output data register			 Adress offset: 0x0C */
@@ -107,7 +107,7 @@ typedef struct
 	__vo uint32_t FTSR;
 	__vo uint32_t SWIER;
 	__vo uint32_t PR;
-} EXTI_TypeDef;
+} EXTI_RegDef_t;
 
 
 /*
@@ -243,7 +243,7 @@ typedef struct
 #define I2C1                	 ((I2C_RegDef_t *)I2C1_BASEADDR)
 #define SPI1                	 ((SPI_RegDef_t *)SPI1_BASEADDR)
 #define USART1              	 ((USART_RegDef_t *)USART1_BASEADDR)
-#define RCC              	 	 ((RCC_RegDef_t *)RCC_BASEADDR)
+#define RCC              	 ((RCC_RegDef_t *)RCC_BASEADDR)
 
 #define DMA1                	 ((DMA_RegDef_t *)DMA1_BASE)
 #define DMA1_Channel1       	 ((DMA_Channel_RegDef_t *)DMA1_Channel1_BASEADDR)
