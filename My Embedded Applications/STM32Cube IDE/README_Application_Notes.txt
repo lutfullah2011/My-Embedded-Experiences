@@ -7,7 +7,7 @@
 
 (000_Stm32f1xx_Drivers_Examples)
 **************************************************
-* This file includes 2 examples for now.("Led_toggle_API" and "Led_button" exercises)
+* This file includes 3 examples for now.("Led_toggle_API" and "Led_button" and "Button_interrupt" exercises)
 * I used my own drivers for these examples.
 **************************************************
 
@@ -51,6 +51,7 @@ HAL_ADC_ConvCpltCallback içinde ise bayrağı 1  yapıyordum.   */
 *CUBEIDE de Cubemx KULLANMADAN register seviyesinde, pointer yardımıyla adresleme, bitwise operatörleri kullanarak interrupt 
 uygulaması geliştirmeye çalıştım ama NVIC adresini Memory Mapden bulamadığım(Çözüm arayışım yetersiz kaldı belki de) 
 için uygulamam yarım kaldı:((
+Update: Evet, adresi buldum:))) ARM işlemci olduğu için onun dökümanında adres var. Interrrupt kavramını daha iyi anlamış oldum ve uygulama çalışıyor(08.12.2022) 
 **************************************************
 
 
