@@ -1,6 +1,6 @@
 (000_MY_DRIVERS_000)
 **************************************************
-* This file includes my drivers for both the Device and GPIO. 
+* This file include my drivers for both the Device and GPIO. 
 * I developed these files while taking the Udemy Courses(Mastering Microcontroller and Embedded Driver Development)
 **************************************************
 
