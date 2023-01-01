@@ -37,11 +37,12 @@ https://www.linkedin.com/learning/c-programming-for-embedded-applications-145372
 UDEMY ile 16.5 saatlik "Microcontroller Embedded C Programming: Absolute Beginners" kursunu başarıyla tamamladım.(16.10.2022)https://www.udemy.com/course/microcontroller-embedded-c-programming/
 
 
-<<<<<<<<<<<<<<<<<<<                                                                                                                                                      UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %55'ı tamamlandı.(01.01.2023)                                               https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/ >>>>>>>>>>>>>>>>>>>
+UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %55'ı tamamlandı.(01.01.2023)                                               https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/ 
 
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
   
+
 
 
 @@@@@@@@@@@@@
