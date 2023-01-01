@@ -13,11 +13,16 @@
 
 *UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunun %55'ı tamamlandı.Eğitime ve uygulamaya devam(01.01.2023)                    https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/                                                                                                                                                                                                                                                                               
 ***********************************************************************************************************************************************************************
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
 ***********************************************************************************************************************************************************************
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 @@@@@@@@@@@@@@@@
 GÖMÜLÜ SİSTEMLER
 @@@@@@@@@@@@@@@@
+***********************************************************************************************************************************************************************
+
+
 
 UDEMY ile 33 saatlik "STM32 ile A'dan Z'ye Gömülü Sistemler(Embedded Systems)" kursunu başarıyla tamamladım.
 https://www.udemy.com/course/stm32f-ile-adan-zye-gomulu-sistemler-embedded-systems/
@@ -44,10 +49,12 @@ UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Developmen
   
 
 
-
-@@@@@@@@@@@@@
+***********************************************************************************************************************************************************************
+@@@@@@@@@@@@@@@@@@@
 C PROGRAMLAMA
-@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@
+***********************************************************************************************************************************************************************
+
 
 Sadi Evren Şekerin Bilgisayar Kavramları kanalındaki C dersleri(8 saat video içeriği)
 https://www.youtube.com/watch?v=gHmaZ2zeLu8&list=PL4eNZvHTpYhnACSWVmRBEr1MviDZ26b5E
