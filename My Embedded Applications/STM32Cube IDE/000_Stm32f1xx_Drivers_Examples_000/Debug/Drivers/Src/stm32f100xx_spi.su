@@ -1,0 +1,12 @@
+../Drivers/Src/stm32f100xx_spi.c:20:6:SPI_PCLK	16	static
+../Drivers/Src/stm32f100xx_spi.c:37:6:SPI_Init	24	static
+../Drivers/Src/stm32f100xx_spi.c:91:6:SPI_DeInit	16	static
+../Drivers/Src/stm32f100xx_spi.c:110:9:SPI_GetFlagStatus	16	static
+../Drivers/Src/stm32f100xx_spi.c:123:6:SPI_SendData	24	static
+../Drivers/Src/stm32f100xx_spi.c:150:6:SPI_ReceiveData	24	static
+../Drivers/Src/stm32f100xx_spi.c:178:6:SPI_PeriphControl	16	static
+../Drivers/Src/stm32f100xx_spi.c:194:6:SPI_SSIConfig	16	static
+../Drivers/Src/stm32f100xx_spi.c:210:6:SPI_SSOEConfig	16	static
+../Drivers/Src/stm32f100xx_spi.c:244:6:SPI_IRQInterruptConfig	16	static
+../Drivers/Src/stm32f100xx_spi.c:253:6:SPI_IRQPriorityConfig	16	static
+../Drivers/Src/stm32f100xx_spi.c:263:6:SPI_IRQHandling	16	static

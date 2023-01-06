@@ -1,0 +1,10 @@
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:53:6:gpioConfig	56	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:103:6:spiConfig	24	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:122:6:delay	16	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:129:5:main	8	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:192:9:SPI_ResponseCheck	16	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:205:6:command_led_control	8	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:239:6:command_read_sensor	16	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:277:6:command_read_led	16	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:316:6:command_what_yo_want_to_print	48	static
+../Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.c:356:6:command_check_id	24	static

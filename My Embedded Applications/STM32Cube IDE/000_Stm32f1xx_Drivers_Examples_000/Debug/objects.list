@@ -1,5 +1,6 @@
 "./Drivers/Src/stm32f100xx_gpio.o"
-"./Src/003Button_interrupt.o"
+"./Drivers/Src/stm32f100xx_spi.o"
+"./Src/006SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"
 "./Startup/startup_stm32f100rbtx.o"

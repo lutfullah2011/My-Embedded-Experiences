@@ -231,7 +231,7 @@ typedef struct
 	__vo uint32_t SR;			/* Status register                	 Address offset: 0x08 */
 	__vo uint32_t DR;			/* Data register                 	 Address offset: 0x0C */
 	__vo uint32_t CRCPR;		/* CRC polynomial register			 Address offset: 0x10 */ /*CRC(Cyclic redundancy check)*/
-	__vo uint32_t RXCRCR;		/* RX CRC register                 	 Address offset: 0x14 */
+	__vo uint32_t RXCRCR;		/* RX CRC register                 	 Address offset: 0x14 */ /*CRC = Döngü fazlalık denetimi*/
 	__vo uint32_t TXCRCR;		/* TX CRC register                   Address offset: 0x18 */
 } SPI_RegDef_t;
 
@@ -335,6 +335,10 @@ typedef struct
 #define GPIOD_REG_RESET()			do{(RCC->APB2RSTR |= (1<<5)); (RCC->APB2RSTR &= ~(1<<5));}while(0) /* GPIO port D clock reset(Set 1, then 0) */
 #define GPIOE_REG_RESET()			do{(RCC->APB2RSTR |= (1<<6)); (RCC->APB2RSTR &= ~(1<<6));}while(0) /* GPIO port E clock reset(Set 1, then 0) */
 
+#define SPI1_REG_RESET()			do{(RCC->APB2RSTR |= (1<<12)); (RCC->APB2RSTR &= ~(1<<12));}while(0) /* SPI1 clock reset(Set 1, then 0) */
+
+
+
 
 
 /*
@@ -352,6 +356,7 @@ typedef struct
 										 ((x) == GPIOE) ? 4:0;
 
 
+
 /*
  * IRQ(Interrupt Request) Number definitions (Vector Table addresses)
  */
@@ -363,6 +368,7 @@ typedef struct
 #define IRQn_EXTI9_5                 23     /*!< EXTI Line5-9 Interrupt 							  */
 #define IRQn_EXTI15_10               40     /*!< EXTI Line10-15 Interrupt 							  */
 
+
 // Macros for interrupt priority, 8 for now. You can use up to 16.
 #define NVIC_IRQ_PRI0		0
 #define NVIC_IRQ_PRI1		1
@@ -373,6 +379,7 @@ typedef struct
 #define NVIC_IRQ_PRI6		6
 #define NVIC_IRQ_PRI7		7
 
+
 /*
  * Some Generic Macros
  */
@@ -382,10 +389,47 @@ typedef struct
 #define SET 			 !RESET
 #define GPIO_PIN_SET   	 SET
 #define GPIO_PIN_RESET   RESET
+#define FLAG_RESET		 RESET
+#define FLAG_SET		 SET
 
+/******************************************************************************/
+/* 					Bit Position definitions of SPI Peripheral				  */
+/******************************************************************************/
 
+// Bitfield for SPI_CR1 register
+#define  SPI_CR1_CPHA                        0            /* Clock Phase */
+#define  SPI_CR1_CPOL                        1            /* Clock Polarity */
+#define  SPI_CR1_MSTR                        2            /* Master Selection */
+#define  SPI_CR1_BR                          3            /* BR[2:0] bits (Baud Rate Control) */
+#define  SPI_CR1_SPE                         6            /* SPI Enable(0 means disabled) */
+#define  SPI_CR1_SSI                         8            /* Internal slave select */
+#define  SPI_CR1_SSM                         9            /* Software slave management */
+#define  SPI_CR1_RXONLY                      10           /* Receive only */
+#define  SPI_CR1_DFF                         11           /* Data Frame Format */
+#define  SPI_CR1_BIDIOE                      14           /* Output enable in bidirectional mode */
+#define  SPI_CR1_BIDIMODE                    15           /* Bidirectional data mode enable */
+
+// Bitfield for SPI_CR2 register
+#define  SPI_CR2_RXDMAEN                     0            /* Rx Buffer DMA Enable */
+#define  SPI_CR2_TXDMAEN                     1            /* Tx Buffer DMA Enable */
+#define  SPI_CR2_SSOE                        2            /* SS Output Enable */
+#define  SPI_CR2_ERRIE                       5            /* Error Interrupt Enable */
+#define  SPI_CR2_RXNEIE                      6            /* RX buffer Not Empty Interrupt Enable */
+#define  SPI_CR2_TXEIE                       7            /* Tx buffer Empty Interrupt Enable */
+
+// Bitfield for SPI_SR register
+#define  SPI_SR_RXNE                         0            /* Receive buffer Not Empty */
+#define  SPI_SR_TXE                          1            /* Transmit buffer Empty */
+#define  SPI_SR_MODF                         5            /* Mode fault */
+#define  SPI_SR_OVR                          6            /* Overrun flag */
+#define  SPI_SR_BSY                          7            /* Busy flag */
+
+// Bitfield for SPI_DR register
+#define  SPI_DR_DR							 0xFFFF       /* Data Register */
 
 
 #include "stm32f100xx_gpio.h"
+#include "stm32f100xx_spi.h"
+
 
 #endif /* INC_STM32F1XX_H_ */

@@ -46,8 +46,8 @@ typedef struct
 /*
  * GPIO Speed Configuration with assigning a value
  */
-#define  GPIO_SPEED_LOW        1 	   /* Low speed = 2MHz */
-#define  GPIO_SPEED_MEDIUM     2       /* Medium speed = 10MHz */
+#define  GPIO_SPEED_LOW        2 	   /* Low speed = 2MHz */
+#define  GPIO_SPEED_MEDIUM     1       /* Medium speed = 10MHz */
 #define  GPIO_SPEED_HIGH       3       /* High speed = 50MHz */
 
 
