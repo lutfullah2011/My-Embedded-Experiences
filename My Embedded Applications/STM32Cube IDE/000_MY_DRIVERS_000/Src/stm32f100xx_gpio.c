@@ -71,6 +71,10 @@ void GPIO_PCLK(GPIO_RegDef_t *pGPIOx, uint8_t EnorDis)
  */
 void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 {
+
+	//Enable the Clock first .  //I configured this setting inside the Init function because user could forget to enable the clock:)
+	GPIO_PCLK(pGPIOHandle->pGPIOx, ENABLE);
+
 	//currentmode = ((uint32_t)GPIO_InitStruct->GPIO_Mode) & ((uint32_t)0x0F);
 
 	/**************************************************************************************************************/
@@ -136,7 +140,7 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 	    }
 
 		tempmode |= (((pGPIOHandle->GPIO_PinConfig.GPIO_Mode) & (0x0F)) <<  (4 * pGPIOHandle->GPIO_PinConfig.GPIO_Pin) ); // Getting the last 4 bits of GPIO_Mode to shift them 4 times left properly
-		pGPIOHandle->pGPIOx->CRL &= ~( 0xF << pGPIOHandle->GPIO_PinConfig.GPIO_Pin); // Clearing the corresponding bits first.
+		pGPIOHandle->pGPIOx->CRL &= ~( 0xF << (4 * pGPIOHandle->GPIO_PinConfig.GPIO_Pin) ); // Clearing the corresponding bits first.
 		pGPIOHandle->pGPIOx->CRL |= tempmode;
 	}
 
@@ -163,7 +167,7 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle)
 	    }
 
 		tempmode |= (((pGPIOHandle->GPIO_PinConfig.GPIO_Mode) & (0x0F)) <<  (4 * ((pGPIOHandle->GPIO_PinConfig.GPIO_Pin) - 8)) ); // Getting the last 4 bits of GPIO_Mode to shift them 4 times left properly. Between 8-16 pin number
-		pGPIOHandle->pGPIOx->CRH &= ~( 0xF << pGPIOHandle->GPIO_PinConfig.GPIO_Pin); // Clearing the corresponding bits first.
+		pGPIOHandle->pGPIOx->CRH &= ~( 0xF << (4 * ((pGPIOHandle->GPIO_PinConfig.GPIO_Pin) - 8)) ); // Clearing the corresponding bits first.
 		pGPIOHandle->pGPIOx->CRH |= tempmode ;
 
 	}
