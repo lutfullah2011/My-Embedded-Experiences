@@ -19,10 +19,16 @@ void gpioConfig(){
 
 	//For SPI1 TX
 	pGPIOspi.pGPIOx = GPIOA;
-	pGPIOspi.GPIO_PinConfig.GPIO_Mode = GPIO_MODE_AF_PP;
-	pGPIOspi.GPIO_PinConfig.GPIO_Pin = GPIO_Pin_4 |GPIO_Pin_5 |GPIO_Pin_6 |GPIO_Pin_7;// In this application, we dont need to use MISO and NSS pin but lets keep it for now
+	pGPIOspi.GPIO_PinConfig.GPIO_Mode = GPIO_MODE_AF_PP;	
 	pGPIOspi.GPIO_PinConfig.GPIO_Speed = GPIO_SPEED_MEDIUM;
-
+	//NCC
+	pGPIOspi.GPIO_PinConfig.GPIO_Pin = GPIO_Pin_4 ;// In this application, we dont need to use MISO and NSS pin but lets keep it for now
+	GPIO_Init(&pGPIOspi);
+	//MOSI
+	pGPIOspi.GPIO_PinConfig.GPIO_Pin = GPIO_Pin_5 
+	GPIO_Init(&pGPIOspi);
+	//CLK
+	pGPIOspi.GPIO_PinConfig.GPIO_Pin = GPIO_Pin_7 
 	GPIO_Init(&pGPIOspi);
 
 }
