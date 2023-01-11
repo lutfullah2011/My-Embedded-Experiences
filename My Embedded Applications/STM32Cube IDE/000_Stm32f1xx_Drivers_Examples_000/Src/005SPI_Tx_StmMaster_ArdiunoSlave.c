@@ -32,7 +32,7 @@ void gpioConfig(){
 	pGPIOspi.GPIO_PinConfig.GPIO_Pin = GPIO_Pin_7;
 	GPIO_Init(&pGPIOspi);
 
-		//For NCC
+	//For NCC
 	pGPIOspi.GPIO_PinConfig.GPIO_Mode = GPIO_MODE_OUT_PP;
 	// Bu kismi yaoinca pin low olmuyor anlamadim, SSOE biti 1 olunca NSS pini neden low olmuyor?//pGPIOspi.GPIO_PinConfig.GPIO_Mode = GPIO_MODE_INPUT_PU;
 	pGPIOspi.GPIO_PinConfig.GPIO_Pin = GPIO_Pin_4;
