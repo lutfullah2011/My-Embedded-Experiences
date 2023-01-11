@@ -9,9 +9,10 @@
 #define INC_STM32F1XX_H_
 
 #include <stdint.h>
+#include<stddef.h>
 
 #define __vo volatile
-
+#define __weak __attribute__((weak))
 
 /******************************************************************************/
 /*                   START:Processor Specific Details		                  */
@@ -102,7 +103,7 @@
  */
 typedef struct
 {
-    __vo uint32_t CRL;			/* Configuration register low	 Adress offset: 0x00 */
+	__vo uint32_t CRL;			/* Configuration register low	 Adress offset: 0x00 */
     __vo uint32_t CRH;			/* Configuration register high	 Adress offset: 0x04 */
     __vo uint32_t IDR;			/* Input data register			 Adress offset: 0x08 */
     __vo uint32_t ODR;			/* Output data register			 Adress offset: 0x0C */
@@ -166,9 +167,9 @@ typedef struct
  */
 typedef struct
 {
-    __vo uint32_t SR;			/* Status register 	 							Adress offset: 0x00 */
-    __vo uint32_t CR1;			/* Control register 1 	 						Adress offset: 0x04 */
-    __vo uint32_t CR2;			/* Control register 2 	 						Adress offset: 0x08 */
+	__vo uint32_t SR;			/* Status register 	 							Adress offset: 0x00 */
+	__vo uint32_t CR1;			/* Control register 1 	 						Adress offset: 0x04 */
+	__vo uint32_t CR2;			/* Control register 2 	 						Adress offset: 0x08 */
     __vo uint32_t SMPR1;		/* Sample time register 1 	 					Adress offset: 0x0C */
     __vo uint32_t SMPR2;		/* Sample time register 2 	 					Adress offset: 0x10 */
     __vo uint32_t JOFR1;		/* Injected channel data offset register 1 	 	Adress offset: 0x14 */
@@ -368,6 +369,9 @@ typedef struct
 #define IRQn_EXTI9_5                 23     /*!< EXTI Line5-9 Interrupt 							  */
 #define IRQn_EXTI15_10               40     /*!< EXTI Line10-15 Interrupt 							  */
 
+#define IRQn_SPI1                    35      /*!< SPI1 Interrupt Number                                */
+#define IRQn_SPI2                    36      /*!< SPI2 Interrupt Number                                */
+
 
 // Macros for interrupt priority, 8 for now. You can use up to 16.
 #define NVIC_IRQ_PRI0		0
@@ -378,6 +382,8 @@ typedef struct
 #define NVIC_IRQ_PRI5		5
 #define NVIC_IRQ_PRI6		6
 #define NVIC_IRQ_PRI7		7
+
+
 
 
 /*
@@ -391,6 +397,8 @@ typedef struct
 #define GPIO_PIN_RESET   RESET
 #define FLAG_RESET		 RESET
 #define FLAG_SET		 SET
+
+
 
 /******************************************************************************/
 /* 					Bit Position definitions of SPI Peripheral				  */
