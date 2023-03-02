@@ -1,13 +1,16 @@
 (000_MY_DRIVERS_000)
 **************************************************
-* This file include my drivers for the Device & GPIO & SPI 
+* This file includes my drivers for both the Device & GPIO & SPI & I2C. 
 * I developed these files while taking the Udemy Courses(Mastering Microcontroller and Embedded Driver Development)
 **************************************************
 
 
 (000_Stm32f1xx_Drivers_Examples)
 **************************************************
-* This file includes 7 examples for now.("Led_toggle_API" & "Led_button" & "Button_interrupt" & "SPI_TX" & "SPI_Tx_StmMaster_ArduinoSlave" & "SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS" & "SPI_Rx_message_from_Ardiuno_InterruptMode" exercises)
+ This file includes 9 examples for now.
+("Led_toggle_API" & "Led_button" & "Button_interrupt" & "SPI_TX" & "SPI_Tx_StmMaster_ArduinoSlave" & 
+"SPI_TxRx_STM_ARDIUNO_CMD_INTERACTS" & "SPI_Rx_message_from_Ardiuno_InterruptMode" & "I2C_Master_Tx_Test" &
+"I2C_Slave_Tx_InterruptMode_Test" exercises)
 * I used my own drivers for these examples.
 **************************************************
 
@@ -51,7 +54,6 @@ HAL_ADC_ConvCpltCallback içinde ise bayrağı 1  yapıyordum.   */
 *CUBEIDE de Cubemx KULLANMADAN register seviyesinde, pointer yardımıyla adresleme, bitwise operatörleri kullanarak interrupt 
 uygulaması geliştirmeye çalıştım ama NVIC adresini Memory Mapden bulamadığım(Çözüm arayışım yetersiz kaldı belki de) 
 için uygulamam yarım kaldı:((
-Update: Evet, adresi buldum:))) ARM işlemci olduğu için onun dökümanında adres var. Interrrupt kavramını daha iyi anlamış oldum ve uygulama çalışıyor(08.12.2022) 
 **************************************************
 
 
