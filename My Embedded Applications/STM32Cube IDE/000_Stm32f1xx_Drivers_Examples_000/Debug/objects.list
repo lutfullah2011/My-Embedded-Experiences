@@ -1,6 +1,7 @@
 "./Drivers/Src/stm32f100xx_gpio.o"
+"./Drivers/Src/stm32f100xx_i2c.o"
 "./Drivers/Src/stm32f100xx_spi.o"
-"./Src/007SPI_Rx_message_from_Ardiuno_InterruptMode.o"
+"./Src/009I2C_Slave_Tx_InterruptMode_Test.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"
 "./Startup/startup_stm32f100rbtx.o"

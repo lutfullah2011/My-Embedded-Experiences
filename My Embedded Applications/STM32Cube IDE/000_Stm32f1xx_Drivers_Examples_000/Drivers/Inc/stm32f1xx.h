@@ -338,6 +338,7 @@ typedef struct
 
 #define SPI1_REG_RESET()			do{(RCC->APB2RSTR |= (1<<12)); (RCC->APB2RSTR &= ~(1<<12));}while(0) /* SPI1 clock reset(Set 1, then 0) */
 
+#define I2C1_REG_RESET()			do{(RCC->APB1RSTR |= (1<<21)); (RCC->APB2RSTR &= ~(1<<21));}while(0) /* I2C1 clock reset(Set 1, then 0) */
 
 
 
@@ -372,6 +373,9 @@ typedef struct
 #define IRQn_SPI1                    35      /*!< SPI1 Interrupt Number                                */
 #define IRQn_SPI2                    36      /*!< SPI2 Interrupt Number                                */
 
+#define IRQn_I2C1_EV				 31		/*!< I2C1 Event Interrupt Number                                */
+#define IRQn_I2C1_ER				 32		/*!< I2C1 Error Interrupt Number                                */
+
 
 // Macros for interrupt priority, 8 for now. You can use up to 16.
 #define NVIC_IRQ_PRI0		0
@@ -404,7 +408,7 @@ typedef struct
 /* 					Bit Position definitions of SPI Peripheral				  */
 /******************************************************************************/
 
-// Bitfield for SPI_CR1 register
+// Bitfield for SPI_CR1
 #define  SPI_CR1_CPHA                        0            /* Clock Phase */
 #define  SPI_CR1_CPOL                        1            /* Clock Polarity */
 #define  SPI_CR1_MSTR                        2            /* Master Selection */
@@ -417,7 +421,7 @@ typedef struct
 #define  SPI_CR1_BIDIOE                      14           /* Output enable in bidirectional mode */
 #define  SPI_CR1_BIDIMODE                    15           /* Bidirectional data mode enable */
 
-// Bitfield for SPI_CR2 register
+// Bitfield for SPI_CR2
 #define  SPI_CR2_RXDMAEN                     0            /* Rx Buffer DMA Enable */
 #define  SPI_CR2_TXDMAEN                     1            /* Tx Buffer DMA Enable */
 #define  SPI_CR2_SSOE                        2            /* SS Output Enable */
@@ -425,19 +429,80 @@ typedef struct
 #define  SPI_CR2_RXNEIE                      6            /* RX buffer Not Empty Interrupt Enable */
 #define  SPI_CR2_TXEIE                       7            /* Tx buffer Empty Interrupt Enable */
 
-// Bitfield for SPI_SR register
+// Bitfield for SPI_SR
 #define  SPI_SR_RXNE                         0            /* Receive buffer Not Empty */
 #define  SPI_SR_TXE                          1            /* Transmit buffer Empty */
 #define  SPI_SR_MODF                         5            /* Mode fault */
 #define  SPI_SR_OVR                          6            /* Overrun flag */
 #define  SPI_SR_BSY                          7            /* Busy flag */
 
-// Bitfield for SPI_DR register
+// Bitfield for SPI_DR r
 #define  SPI_DR_DR							 0xFFFF       /* Data Register */
+
+
+
+/******************************************************************************/
+/* 					Bit Position definitions of SPI Peripheral				  */
+/******************************************************************************/
+
+//Bitfield for I2C_CR1
+#define I2C_CR1_PE						0
+#define I2C_CR1_NOSTRETCH  				7
+#define I2C_CR1_START 					8
+#define I2C_CR1_STOP  				 	9
+#define I2C_CR1_ACK 				 	10
+#define I2C_CR1_SWRST  				 	15
+
+
+//Bitfield for I2C_CR2
+#define I2C_CR2_FREQ				 	0
+#define I2C_CR2_ITERREN				 	8
+#define I2C_CR2_ITEVTEN				 	9
+#define I2C_CR2_ITBUFEN 			    10
+
+
+//Bitfield for I2C_OAR1
+#define I2C_OAR1_ADD0    				 0
+#define I2C_OAR1_ADD71 				 	 1
+#define I2C_OAR1_ADD98  			 	 8
+#define I2C_OAR1_BIT14   			 	14
+#define I2C_OAR1_ADDMODE   			 	15
+
+
+//Bitfield for I2C_SR1
+#define I2C_SR1_SB 					 	0
+#define I2C_SR1_ADDR 				 	1
+#define I2C_SR1_BTF 					2
+#define I2C_SR1_ADD10 					3
+#define I2C_SR1_STOPF 					4
+#define I2C_SR1_RXNE 					6
+#define I2C_SR1_TXE 					7
+#define I2C_SR1_BERR 					8
+#define I2C_SR1_ARLO 					9
+#define I2C_SR1_AF 					 	10
+#define I2C_SR1_OVR 					11
+#define I2C_SR1_TIMEOUT 				14
+
+
+//Bitfield for I2C_SR2
+#define I2C_SR2_MSL						0
+#define I2C_SR2_BUSY 					1
+#define I2C_SR2_TRA 					2
+#define I2C_SR2_GENCALL 				4
+#define I2C_SR2_DUALF 					7
+
+
+//Bitfield for I2C_CCR
+#define I2C_CCR_CCR 					 0
+#define I2C_CCR_DUTY 					14
+#define I2C_CCR_FS  				 	15
+
+
 
 
 #include "stm32f100xx_gpio.h"
 #include "stm32f100xx_spi.h"
+#include "stm32f100xx_i2c.h"
 
 
 #endif /* INC_STM32F1XX_H_ */

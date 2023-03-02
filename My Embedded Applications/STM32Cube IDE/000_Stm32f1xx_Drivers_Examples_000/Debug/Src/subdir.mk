@@ -5,17 +5,17 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Src/007SPI_Rx_message_from_Ardiuno_InterruptMode.c \
+../Src/009I2C_Slave_Tx_InterruptMode_Test.c \
 ../Src/syscalls.c \
 ../Src/sysmem.c 
 
 OBJS += \
-./Src/007SPI_Rx_message_from_Ardiuno_InterruptMode.o \
+./Src/009I2C_Slave_Tx_InterruptMode_Test.o \
 ./Src/syscalls.o \
 ./Src/sysmem.o 
 
 C_DEPS += \
-./Src/007SPI_Rx_message_from_Ardiuno_InterruptMode.d \
+./Src/009I2C_Slave_Tx_InterruptMode_Test.d \
 ./Src/syscalls.d \
 ./Src/sysmem.d 
 
@@ -27,7 +27,7 @@ Src/%.o Src/%.su: ../Src/%.c Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/007SPI_Rx_message_from_Ardiuno_InterruptMode.d ./Src/007SPI_Rx_message_from_Ardiuno_InterruptMode.o ./Src/007SPI_Rx_message_from_Ardiuno_InterruptMode.su ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
+	-$(RM) ./Src/009I2C_Slave_Tx_InterruptMode_Test.d ./Src/009I2C_Slave_Tx_InterruptMode_Test.o ./Src/009I2C_Slave_Tx_InterruptMode_Test.su ./Src/syscalls.d ./Src/syscalls.o ./Src/syscalls.su ./Src/sysmem.d ./Src/sysmem.o ./Src/sysmem.su
 
 .PHONY: clean-Src
 

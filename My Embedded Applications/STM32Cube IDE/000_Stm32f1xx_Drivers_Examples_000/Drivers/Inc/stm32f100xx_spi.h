@@ -45,7 +45,7 @@ typedef struct
 	uint8_t 		*pTxBuffer; 		/*  To store the app. Tx buffer address > */
 	uint8_t 		*pRxBuffer;			/*  To store the app. Rx buffer address > */
 	uint32_t 		TxLen;				/*  To store Tx len > */
-	uint32_t 		RxLen;				/*  To store Tx len > */
+	uint32_t 		RxLen;				/*  To store Rx len > */
 	uint8_t 		TxState;			/*  To store Tx state > */
 	uint8_t 		RxState;			/*  To store Rx state > */
 
