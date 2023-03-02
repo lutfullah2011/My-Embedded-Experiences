@@ -295,6 +295,7 @@ void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority)
 
 /*
  * Data Send with non-blocking(Interrupt) Method
+ * This function returns the state
  */
 uint8_t SPI_SendDataIT(SPI_Handle_t *pSPIHandle,uint8_t *pTxBuffer, uint32_t Len)
 {
@@ -325,6 +326,7 @@ uint8_t SPI_SendDataIT(SPI_Handle_t *pSPIHandle,uint8_t *pTxBuffer, uint32_t Len
 
 /*
  * Data Receive with non-blocking(Interrupt) Method
+ * This function returns the state
  */
 uint8_t SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle, uint8_t *pRxBuffer, uint32_t Len)
 {
