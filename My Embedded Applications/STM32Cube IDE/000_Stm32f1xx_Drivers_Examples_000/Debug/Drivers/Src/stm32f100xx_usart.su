@@ -1,0 +1,15 @@
+../Drivers/Src/stm32f100xx_usart.c:22:6:USART_SetBaudRate	40	static
+../Drivers/Src/stm32f100xx_usart.c:94:6:USART_PCLK	16	static
+../Drivers/Src/stm32f100xx_usart.c:111:6:USART_Init	24	static
+../Drivers/Src/stm32f100xx_usart.c:215:6:USART_DeInit	16	static
+../Drivers/Src/stm32f100xx_usart.c:226:6:USART_PeriphControl	16	static
+../Drivers/Src/stm32f100xx_usart.c:243:9:USART_GetFlagStatus	16	static
+../Drivers/Src/stm32f100xx_usart.c:256:6:USART_ClearFlag	16	static
+../Drivers/Src/stm32f100xx_usart.c:266:6:USART_SendData	32	static
+../Drivers/Src/stm32f100xx_usart.c:318:6:USART_ReceiveData	32	static
+../Drivers/Src/stm32f100xx_usart.c:389:6:USART_IRQInterruptConfig	16	static
+../Drivers/Src/stm32f100xx_usart.c:431:6:USART_IRQPriorityConfig	24	static
+../Drivers/Src/stm32f100xx_usart.c:447:9:USART_SendDataIT	32	static
+../Drivers/Src/stm32f100xx_usart.c:475:9:USART_ReceiveDataIT	32	static
+../Drivers/Src/stm32f100xx_usart.c:501:6:USART_IRQHandling	32	static
+../Drivers/Src/stm32f100xx_usart.c:793:13:USART_ApplicationEventCallback	16	static

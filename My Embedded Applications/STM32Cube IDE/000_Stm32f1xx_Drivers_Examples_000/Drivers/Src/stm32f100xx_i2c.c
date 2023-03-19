@@ -123,64 +123,6 @@ void I2C_PCLK(I2C_RegDef_t *pI2Cx, uint8_t EnorDis)
 }
 
 
-/***************************************************************************************/
-
-void RCCPLLOutputClock(void)
-{
-	//Created for RCC_GetPCLC1Value(void) function. Not implemented cause we dont use PLL for now.
-}
-
-uint16_t AHB_PreScaler[9] = {2,4,8,16,32,64,128,256,512};
-uint8_t APB1_PreScaler[4] = {2,4,8,16,};
-/*
- * Generating PERIPH CLOCK value
- */
-uint32_t RCC_GetPCLK1Value(void) // Verify this function from Datasheet & Reference Man
-{
-	uint32_t pclk1, SystemClk;
-	uint16_t ahbp;//AHB Prescaler
-	uint8_t clksrc, temp, apb1p; //AHB Prescaler, APB1 Prescaler
-
-	clksrc = ((RCC->CFGR >> 2) & 0x3); // Bringing those 2 bits to lsb position and mask
-	if(clksrc == 0) // Look at the reference manual
-	{
-		SystemClk = 8000000;
-	}else if(clksrc == 1)
-	{
-		SystemClk = 4000000;
-	}else if(clksrc == 2)
-	{
-		//SystemClk = RCCPLLOutputClock();
-	}
-
-
-	//For AHB
-	temp = ((RCC->CFGR >> 4) & 0xF); // Bringing those 4 bits to lsb position and mask
-	if(temp < 8) // Look at the reference manual
-	{
-		ahbp = 1;
-	}else
-	{
-		ahbp = AHB_PreScaler[temp-8];
-	}
-
-	//For APB1
-	temp = ((RCC->CFGR >> 8) & 0x7); // Bringing those 3 bits to lsb position and mask
-	if(temp < 4) // Look at the reference manual
-	{
-		apb1p = 1;
-	}else
-	{
-		ahbp = APB1_PreScaler[temp-4];
-	}
-
-	pclk1 = (SystemClk / ahbp) / apb1p;
-
-
-	return pclk1;
-}
-
-/***************************************************************************************/
 
 
 /*
@@ -210,6 +152,8 @@ void I2C_PeriphControl(I2C_RegDef_t *pI2Cx, uint8_t EnorDis)
  * 5. Configure the rise time for I2C pin(Time required for signal from GND to Vcc)
  *
  * All the above Configurations must be done When I2C Peripheral Disable in CR1
+ *
+ * RCC_GetPCLK1Value() API implemented in rcc driver.
  */
 void I2C_Init(I2C_Handle_t *pI2CHandle)
 {

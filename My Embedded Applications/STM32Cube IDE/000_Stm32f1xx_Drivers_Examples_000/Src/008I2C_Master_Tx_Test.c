@@ -2,7 +2,7 @@
  * 008I2C_Master_Tx_Test.c
  *
  *  Created on: 24 Şub 2023
- *      Author: luty1
+ *      Author: lutfullah_aydin
  */
 
 /******************************************************************************/

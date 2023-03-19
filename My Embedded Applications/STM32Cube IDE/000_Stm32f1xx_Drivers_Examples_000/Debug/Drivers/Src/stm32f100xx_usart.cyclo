@@ -1,0 +1,15 @@
+stm32f100xx_usart.c:22:6:USART_SetBaudRate	4
+stm32f100xx_usart.c:94:6:USART_PCLK	2
+stm32f100xx_usart.c:111:6:USART_Init	9
+stm32f100xx_usart.c:215:6:USART_DeInit	1
+stm32f100xx_usart.c:226:6:USART_PeriphControl	2
+stm32f100xx_usart.c:243:9:USART_GetFlagStatus	2
+stm32f100xx_usart.c:256:6:USART_ClearFlag	1
+stm32f100xx_usart.c:266:6:USART_SendData	6
+stm32f100xx_usart.c:318:6:USART_ReceiveData	6
+stm32f100xx_usart.c:389:6:USART_IRQInterruptConfig	12
+stm32f100xx_usart.c:431:6:USART_IRQPriorityConfig	1
+stm32f100xx_usart.c:447:9:USART_SendDataIT	2
+stm32f100xx_usart.c:475:9:USART_ReceiveDataIT	2
+stm32f100xx_usart.c:501:6:USART_IRQHandling	31
+stm32f100xx_usart.c:793:13:USART_ApplicationEventCallback	1

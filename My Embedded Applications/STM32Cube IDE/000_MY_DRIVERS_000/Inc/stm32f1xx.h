@@ -338,8 +338,9 @@ typedef struct
 
 #define SPI1_REG_RESET()			do{(RCC->APB2RSTR |= (1<<12)); (RCC->APB2RSTR &= ~(1<<12));}while(0) /* SPI1 clock reset(Set 1, then 0) */
 
-#define I2C1_REG_RESET()			do{(RCC->APB1RSTR |= (1<<21)); (RCC->APB2RSTR &= ~(1<<21));}while(0) /* I2C1 clock reset(Set 1, then 0) */
+#define I2C1_REG_RESET()			do{(RCC->APB1RSTR |= (1<<21)); (RCC->APB1RSTR &= ~(1<<21));}while(0) /* I2C1 clock reset(Set 1, then 0) */
 
+#define USART1_REG_RESET()			do{(RCC->APB2RSTR |= (1<<14)); (RCC->APB2RSTR &= ~(1<<14));}while(0) /* USART1 clock reset(Set 1, then 0) */
 
 
 
@@ -375,6 +376,9 @@ typedef struct
 
 #define IRQn_I2C1_EV				 31		/*!< I2C1 Event Interrupt Number                                */
 #define IRQn_I2C1_ER				 32		/*!< I2C1 Error Interrupt Number                                */
+
+#define IRQn_USART1                  37      /*!< USART1 Interrupt Number                                */
+#define IRQn_USART2                  38      /*!< USART2 Interrupt Number                                */
 
 
 // Macros for interrupt priority, 8 for now. You can use up to 16.
@@ -436,13 +440,13 @@ typedef struct
 #define  SPI_SR_OVR                          6            /* Overrun flag */
 #define  SPI_SR_BSY                          7            /* Busy flag */
 
-// Bitfield for SPI_DR r
+// Bitfield for SPI_DR
 #define  SPI_DR_DR							 0xFFFF       /* Data Register */
 
 
 
 /******************************************************************************/
-/* 					Bit Position definitions of SPI Peripheral				  */
+/* 					Bit Position definitions of I2C Peripheral				  */
 /******************************************************************************/
 
 //Bitfield for I2C_CR1
@@ -499,10 +503,75 @@ typedef struct
 
 
 
+/******************************************************************************/
+/* 					Bit Position definitions of USART Peripheral				  */
+/******************************************************************************/
 
+
+//Bitfield for USART_CR1
+#define USART_CR1_SBK					0
+#define USART_CR1_RWU 					1
+#define USART_CR1_RE  					2
+#define USART_CR1_TE 					3
+#define USART_CR1_IDLEIE 				4
+#define USART_CR1_RXNEIE  				5
+#define USART_CR1_TCIE					6
+#define USART_CR1_TXEIE					7
+#define USART_CR1_PEIE 					8
+#define USART_CR1_PS 					9
+#define USART_CR1_PCE 					10
+#define USART_CR1_WAKE  				11
+#define USART_CR1_M 					12
+#define USART_CR1_UE 					13
+#define USART_CR1_OVER8  				15
+
+
+//Bitfield for USART_CR2
+#define USART_CR2_ADD   				0
+#define USART_CR2_LBDL   				5
+#define USART_CR2_LBDIE  				6
+#define USART_CR2_LBCL   				8
+#define USART_CR2_CPHA   				9
+#define USART_CR2_CPOL   				10
+#define USART_CR2_STOP   				12
+#define USART_CR2_LINEN   				14
+
+
+//Bitfield for USART_CR3
+#define USART_CR3_EIE   				0
+#define USART_CR3_IREN   				1
+#define USART_CR3_IRLP  				2
+#define USART_CR3_HDSEL   				3
+#define USART_CR3_NACK   				4
+#define USART_CR3_SCEN   				5
+#define USART_CR3_DMAR  				6
+#define USART_CR3_DMAT   				7
+#define USART_CR3_RTSE   				8
+#define USART_CR3_CTSE   				9
+#define USART_CR3_CTSIE   				10
+#define USART_CR3_ONEBIT   				11
+
+
+//Bitfield for USART_SR
+#define USART_SR_PE        				0 //Parity Error
+#define USART_SR_FE        				1 //Framing Error
+#define USART_SR_NF        				2 //Noise detected Flag
+#define USART_SR_ORE       				3 //Overrun Error
+#define USART_SR_IDLE       			4 //IDLE line Detected
+#define USART_SR_RXNE        			5 //Read data register not Empty
+#define USART_SR_TC        				6 //Tranmission Complete
+#define USART_SR_TXE        			7 //Transmit data Register Empty
+#define USART_SR_LBD        			8 //LIN break detection flag
+#define USART_SR_CTS        			9 //CTS flag
+
+
+
+//Include files All together
 #include "stm32f100xx_gpio.h"
 #include "stm32f100xx_spi.h"
 #include "stm32f100xx_i2c.h"
+#include "stm32f100xx_usart.h"
+#include "stm32f100xx_rcc.h"
 
 
 #endif /* INC_STM32F1XX_H_ */
