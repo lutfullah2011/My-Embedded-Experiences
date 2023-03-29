@@ -1,0 +1,4 @@
+010USART_TX.c:31:6:gpioConfig	1
+010USART_TX.c:73:6:usartConfig	1
+010USART_TX.c:90:6:delay	2
+010USART_TX.c:97:5:main	2

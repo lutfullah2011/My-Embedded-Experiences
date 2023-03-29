@@ -1,0 +1,11 @@
+../BSP(Board Support Package)/lcd.c:18:6:lcd_send_command	16	static
+../BSP(Board Support Package)/lcd.c:38:6:lcd_print_char	16	static
+../BSP(Board Support Package)/lcd.c:55:6:lcd_print_string	16	static
+../BSP(Board Support Package)/lcd.c:72:6:lcd_init	24	static
+../BSP(Board Support Package)/lcd.c:161:13:write_4_bits	16	static
+../BSP(Board Support Package)/lcd.c:172:6:lcd_clear	8	static
+../BSP(Board Support Package)/lcd.c:183:6:lcd_return_home	8	static
+../BSP(Board Support Package)/lcd.c:198:6:lcd_set_cursor	16	static
+../BSP(Board Support Package)/lcd.c:220:13:lcd_enable	8	static
+../BSP(Board Support Package)/lcd.c:229:13:mdelay	24	static
+../BSP(Board Support Package)/lcd.c:234:13:udelay	24	static

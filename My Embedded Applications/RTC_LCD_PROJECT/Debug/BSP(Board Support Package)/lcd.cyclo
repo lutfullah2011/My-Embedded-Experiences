@@ -1,0 +1,11 @@
+lcd.c:18:6:lcd_send_command	1
+lcd.c:38:6:lcd_print_char	1
+lcd.c:55:6:lcd_print_string	2
+lcd.c:72:6:lcd_init	1
+lcd.c:161:13:write_4_bits	1
+lcd.c:172:6:lcd_clear	1
+lcd.c:183:6:lcd_return_home	1
+lcd.c:198:6:lcd_set_cursor	3
+lcd.c:220:13:lcd_enable	1
+lcd.c:229:13:mdelay	2
+lcd.c:234:13:udelay	2
