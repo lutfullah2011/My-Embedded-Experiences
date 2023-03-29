@@ -22,7 +22,7 @@
  * In this project, Lastly, this file is the application layer(RTC_LCD.c)
  *
  *
- * In this prooject, while debugging mode, it occurs "hard fault" and goes to RESET HANDLER. It because, program hangs in while loop, thats why!!
+ * In this prooject, while debugging mode, it occurs "hard fault" and goes to RESET HANDLER. It because, program hangs in while loop, thats why but ıt is fixed, no problem!!
  *
  */
 
