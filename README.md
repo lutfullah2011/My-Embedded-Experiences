@@ -13,7 +13,12 @@
 *Kariyer.net techcareer aracılığı ile 45 saat Aykut Taşdelen anlatımıyla online Embedded Bootcamp eğitimi alıp proje tamamladım.                                        (24.10.2022 - 18.11.2022) https://github.com/lutfullah2011/Embedded-Bootcamp-Project.git                                                                                          
 
 *UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunu başarıyla tamamladım.Eğitime ve uygulamaya devam(26.03.2023)                https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/  
-                                                                                                                                                                                                                                                                                                                                                Kurs kapsamında Bare-Metal olarak GPIO Driver & SPI Driver & I2C Driver & USART Driver yazıldı. "RTC on LCD with I2C" uygulaması yapıldı......
+                                                                                                                                                                       Kurs kapsamında Bare-Metal olarak GPIO Driver & SPI Driver & I2C Driver & USART Driver yazıldı. "RTC on LCD with I2C" uygulaması yapıldı......
+
+
+*UDEMY ile 12 saatlik "Embedded System Design using UML State Machines" kursunun %15'ini tamamladım.Eğitime ve uygulamaya devam(09.04.2023)                https://www.udemy.com/course/embedded-system-design-using-uml-state-machines/
+
+
 
 ***********************************************************************************************************************************************************************
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
@@ -52,6 +57,8 @@ UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Developmen
   
 
 
+
+
 ***********************************************************************************************************************************************************************
 @@@@@@@@@@@@@@@@@@@
 C PROGRAMLAMA
@@ -67,3 +74,7 @@ https://www.youtube.com/watch?v=Zge96TxOliQ&list=PLmkV2uU8kdpLw1fepQQ180Ftjo_BWI
 
 Yazılım Bilimi kanalında 50 videolu C Temel eğitim dersleri(8 saat civarı video içeriği)
 https://www.youtube.com/watch?v=naWZ2xVuF30&list=PLIHume2cwmHdFsJRo5oYG7yQ4NyUx43ql
+
+
+
+
