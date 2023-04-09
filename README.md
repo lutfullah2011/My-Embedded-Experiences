@@ -47,8 +47,6 @@ https://www.edx.org/course/embedded-systems-essentials-with-arm-getting-started
 "C Programming for Embedded Applications" kursu // linkedin LEARNİNG 2 saat civarı //
 https://www.linkedin.com/learning/c-programming-for-embedded-applications-14537235/integral-types?autoplay=true
 
-UDEMY ile 16.5 saatlik "Microcontroller Embedded C Programming: Absolute Beginners" kursunu başarıyla tamamladım.(16.10.2022)https://www.udemy.com/course/microcontroller-embedded-c-programming/
-
 
 UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunu başarıyla tamamladım.(26.03.2023)                                          https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/ 
 
@@ -65,6 +63,7 @@ C PROGRAMLAMA
 @@@@@@@@@@@@@@@@@@@
 ***********************************************************************************************************************************************************************
 
+UDEMY ile 16.5 saatlik "Microcontroller Embedded C Programming: Absolute Beginners" kursunu başarıyla tamamladım.(16.10.2022)https://www.udemy.com/course/microcontroller-embedded-c-programming/
 
 Sadi Evren Şekerin Bilgisayar Kavramları kanalındaki C dersleri(8 saat video içeriği)
 https://www.youtube.com/watch?v=gHmaZ2zeLu8&list=PL4eNZvHTpYhnACSWVmRBEr1MviDZ26b5E
