@@ -16,7 +16,7 @@
                                                                                                                                                                        Kurs kapsamında Bare-Metal olarak GPIO Driver & SPI Driver & I2C Driver & USART Driver yazıldı. "RTC on LCD with I2C" uygulaması yapıldı......
 
 
-*UDEMY ile 12 saatlik "Embedded System Design using UML State Machines" kursunun %50'ini tamamladım.Eğitime ve uygulamaya devam(01.05.2023)                https://www.udemy.com/course/embedded-system-design-using-uml-state-machines/
+*UDEMY ile 12 saatlik "Embedded System Design using UML State Machines" kursunun %75'ini tamamladım.Eğitime ve uygulamaya devam(06.05.2023)                https://www.udemy.com/course/embedded-system-design-using-uml-state-machines/
 
 
 
