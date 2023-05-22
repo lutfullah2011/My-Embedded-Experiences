@@ -1,0 +1,1096 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model version="5.2.2" links="0">
+ <framework name="qpn"/>
+ <package name="HSMs" stereotype="0x02">
+  <class name="Alarm_Clock" superclass="qpn::QHsm">
+   <attribute name="temp_time" type="uint32_t" visibility="0x02" properties="0x00"/>
+   <attribute name="alarm_time" type="uint32_t" visibility="0x02" properties="0x00"/>
+   <attribute name="alarm_status" type="uint32_t" visibility="0x02" properties="0x00"/>
+   <attribute name="time_mode" type="uint32_t" visibility="0x02" properties="0x00"/>
+   <attribute name="obj" type="Alarm_Clock" visibility="0x02" properties="0x01"/>
+   <attribute name="temp_format" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="temp_digit" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="timeout" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <attribute name="alarm_timeout" type="uint16_t" visibility="0x02" properties="0x00"/>
+   <attribute name="curr_time" type="uint32_t" visibility="0x02" properties="0x01"/>
+   <attribute name="curr_setting" type="uint8_t" visibility="0x02" properties="0x00"/>
+   <operation name="get_curr_time" type="uint32_t" visibility="0x00" properties="0x01">
+    <documentation>This returns the value of curr_time</documentation>
+    <code>// We are disable the ISR and get the current time    
+uint8_t saved_sreg = SREG; //Save the status of SREG
+uint32_t temp;
+cli(); //This command disable the interrupt
+temp = Alarm_Clock_curr_time; //Setting the new value
+SREG = saved_sreg;
+return temp;</code>
+   </operation>
+   <operation name="update_curr_time" type="void" visibility="0x00" properties="0x01">
+    <code>if(++Alarm_Clock_curr_time == MAX_TIME){
+    Alarm_Clock_curr_time = 0;
+}</code>
+   </operation>
+   <operation name="set_curr_time" type="void" visibility="0x00" properties="0x01">
+    <parameter name="new_curr_time" type="uint32_t"/>
+    <code>// We are disable the ISR and set the current time    
+uint8_t save_sreg = SREG; //Save the status of SREG
+cli(); //This command disable the interrupt
+TCCR1B &amp;= ~(0x7U); //Stop the TIMER1
+TCNT1 = 0U;// Make counter register zero.
+Alarm_Clock_curr_time = new_curr_time; //Setting the new value
+TCCR1B |= 0x4U;//Provide clock source with prescaler clk/256
+SREG = save_sreg;
+
+</code>
+   </operation>
+   <operation name="display_curr_time" type="void" visibility="0x00" properties="0x00">
+    <parameter name="row" type="uint8_t"/>
+    <parameter name="col" type="uint8_t"/>
+    <code>/*
+ * Convert the current time into string and displays it depending upon the time mode
+ * param1: 'me' pointer
+ * param2 : row number of the LCD
+ * param3: column number of the LCD
+ */
+String time_as_string; // Create String class object
+uint32_t time_;
+
+uint32_t time24h = Alarm_Clock_get_curr_time();
+uint8_t ss = time24h % 10U;       //extract sub-second to append later
+time24h /= 10; //convert the time to number of seconds 
+
+time_ = (me-&gt;time_mode == MODE_24H)?time24h:convert_24hformat_to_12h(time24h);
+time_as_string = integertime_to_string(time_); //hh:mm:ss
+time_as_string.concat('.'); //concat is just a member of String object
+time_as_string.concat(ss);
+
+/*if mode is 12H , concatenate  am/pm information */
+if(me-&gt;time_mode == MODE_12H){
+    time_as_string.concat(' ');
+    time_as_string.concat(get_am_or_pm(time24h));
+}
+
+display_write(time_as_string,row,col); //Display in the LCD</code>
+   </operation>
+   <operation name="display_clock_setting_time" type="void" visibility="0x00" properties="0x00">
+    <parameter name="row" type="uint8_t"/>
+    <parameter name="col" type="uint8_t"/>
+    <code>/*
+ * Convert the current time into string and displays it depending upon the time mode
+ * param1: 'me' pointer
+ * param2 : row number of the LCD
+ * param3: column number of the LCD
+ */
+String time_as_string;
+
+time_as_string = integertime_to_string(me-&gt;temp_time); //hh:mm:ss
+
+/*concatenate(combine)  am/pm information */
+if(me-&gt;temp_format != FORMAT_24H){
+    time_as_string.concat(' ');
+    if(me-&gt;temp_format == FORMAT_AM)
+        time_as_string.concat(&quot;AM&quot;);
+    else
+        time_as_string.concat(&quot;PM&quot;);
+}
+
+display_write(time_as_string,row,col);</code>
+   </operation>
+   <statechart properties="0x00">
+    <initial target="../1/3">
+     <action>Alarm_Clock_set_curr_time(INITIAL_CURR_TIME);
+me-&gt;alarm_time = INITIAL_ALARM_TIME;
+me-&gt;alarm_status = ALARM_OFF;
+me-&gt;time_mode = MODE_12H;
+</action>
+     <initial_glyph conn="7,16,4,3,11,10">
+      <action box="0,-2,10,2"/>
+     </initial_glyph>
+    </initial>
+    <state name="CLOCK">
+     <history type="deep" target="../3">
+      <history_glyph conn="29,138,2,2,-96"/>
+     </history>
+     <tran trig="ALARM">
+      <choice target="../../../2">
+       <guard>me-&gt;alarm_status == ALARM_ON &amp;&amp; Alarm_Clock_get_curr_time()/10 == me-&gt;alarm_time</guard>
+       <action>//Comment for guard lines : We are checking if alarm status ON 
+//And current time(diveded by 10 to get in terms of second) is equal to user setting alarm time</action>
+       <choice_glyph conn="93,145,4,0,14">
+        <action box="1,0,10,2"/>
+       </choice_glyph>
+      </choice>
+      <tran_glyph conn="93,138,2,-1,7">
+       <action box="0,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <state name="Setting">
+      <exit>display_clear();
+display_cursor_off_blinkoff();</exit>
+      <tran trig="CANCEL" target="../../3">
+       <tran_glyph conn="59,55,3,2,-15,-13">
+        <action box="0,-2,10,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="OK" target="../../3">
+       <tran_glyph conn="59,59,3,2,-24,-17">
+        <action box="0,-1,10,2"/>
+       </tran_glyph>
+      </tran>
+      <state name="Alarm_Setting">
+       <entry>Alarm_Clock_display_clock_setting_time(me, CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_COL);
+display_cursor_on_blinkon();</entry>
+       <initial target="../4">
+        <initial_glyph conn="76,77,4,3,6,2">
+         <action box="0,-2,10,2"/>
+        </initial_glyph>
+       </initial>
+       <tran trig="OK">
+        <action>me-&gt;alarm_status = me-&gt;temp_digit; //We copied the user selection whether 0(off) or 1(on) to the alarm status 
+if(me-&gt;temp_format != FORMAT_24H){
+    me-&gt;temp_time = convert_12hformat_to_24h( me-&gt;temp_time,(time_format_t)me-&gt;temp_format);
+}</action>
+        <choice>
+         <guard>0</guard>
+         <choice_glyph conn="80,117,5,-1,7">
+          <action box="1,0,10,2"/>
+         </choice_glyph>
+        </choice>
+        <tran_glyph conn="71,117,3,-1,9">
+         <action box="0,-2,10,2"/>
+        </tran_glyph>
+       </tran>
+       <tran trig="TICK">
+        <action>Alarm_Clock_display_curr_time(me,ALARM_SETTING_CURR_TIME_ROW,ALARM_SETTING_CURR_TIME_COL);
+
+if( QHsm_state(me) != Q_STATE_CAST(&amp;Alarm_Clock_Alarm_OnOff)) // If its not in the alarmonOff state
+    Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL);
+
+//We are just checking which state we are and according to that set the cursor!!
+if( QHsm_state(me) == Q_STATE_CAST(&amp;Alarm_Clock_ASet_hour_d1)) //This macro(QHsm_state(me)) helps to obtain current active state
+    display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_HOUR_D1_COL); //It is a  function pointer
+else if( QHsm_state(me) == Q_STATE_CAST(&amp;Alarm_Clock_ASet_hour_d2))
+    display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_HOUR_D2_COL);
+else if( QHsm_state(me) == Q_STATE_CAST(&amp;Alarm_Clock_ASet_min_d1))
+    display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_MIN_D1_COL);
+else if( QHsm_state(me) == Q_STATE_CAST(&amp;Alarm_Clock_ASet_min_d2))
+    display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_MIN_D2_COL);
+else if( QHsm_state(me) == Q_STATE_CAST(&amp;Alarm_Clock_ASet_sec_d1))
+    display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_SEC_D1_COL);
+else if( QHsm_state(me) == Q_STATE_CAST(&amp;Alarm_Clock_ASet_sec_d2))
+    display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_SEC_D2_COL);
+else if( QHsm_state(me) == Q_STATE_CAST(&amp;Alarm_Clock_ASet_format))
+    display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL);
+else if( QHsm_state(me) == Q_STATE_CAST(&amp;Alarm_Clock_Alarm_OnOff))
+    display_set_cursor(CLOCK_SETTING_TIME_ROW,ALARM_SETTING_STATUS_COL);
+</action>
+        <tran_glyph conn="71,123,3,-1,13">
+         <action box="0,-2,10,2"/>
+        </tran_glyph>
+       </tran>
+       <state name="ASet_sec_d1">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_SEC_D1_COL);
+me-&gt;temp_digit = DIGIT1(GET_SEC(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 6; //This digit can be 0,1,2,3,4,5 .
+me-&gt;temp_time -=  DIGIT1(GET_SEC(me-&gt;temp_time)) * 10UL * 3600UL; // Updating temporary time, 10th place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 10UL  * 3600UL; // Updating temporary time, 10th place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_SEC_D1_COL); // Updating Cursor bring back to second D1 place</action>
+         <tran_glyph conn="80,110,3,-1,11">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../5">
+         <tran_glyph conn="95,105,1,3,6">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="80,101,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ASet_hour_d1">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_HOUR_D1_COL);
+me-&gt;temp_digit = DIGIT1(GET_HOUR(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 3; //This digit can be 0,1 or 2.
+me-&gt;temp_time -=  DIGIT1(GET_HOUR(me-&gt;temp_time)) * 10UL * 3600UL; // Updating temporary time, 10th place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 10UL  * 3600UL; // Updating temporary time, 10th place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_HOUR_D1_COL); // Updating Cursor bring back to hour D1 place</action>
+         <tran_glyph conn="78,87,3,-1,11">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../8">
+         <tran_glyph conn="93,83,1,3,5">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="78,78,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ASet_sec_d2">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_SEC_D2_COL);
+me-&gt;temp_digit = DIGIT2(GET_SEC(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 10; //This digit can be 0,1,2,3 ..... 9.
+me-&gt;temp_time -=  DIGIT2(GET_SEC(me-&gt;temp_time)) * 3600UL; // Updating temporary time, 1st place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 3600UL; // Updating temporary time, 1st place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_SEC_D2_COL); // Updating Cursor bring back to second D2 place</action>
+         <tran_glyph conn="101,110,3,-1,12">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../7">
+         <tran_glyph conn="116,105,1,3,12">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="101,101,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ASet_error">
+        <entry>display_cursor_off_blinkoff();
+display_erase_block(1,0,15);
+me-&gt;timeout = 0;</entry>
+        <exit>display_erase_block(CLOCK_SETTING_ERR_MSG_ROW, CLOCK_SETTING_ERR_MSG_COL,CLOCK_SETTING_ERR_MSG_COL_END);
+me-&gt;timeout = 0;</exit>
+        <initial target="../3">
+         <initial_glyph conn="162,107,4,3,4,2">
+          <action box="0,-2,10,2"/>
+         </initial_glyph>
+        </initial>
+        <tran trig="SET" target="../..">
+         <action>display_cursor_on_blinkon();</action>
+         <tran_glyph conn="189,100,0,0,-28">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK">
+         <tran_glyph conn="175,116,2,-1,-4">
+          <action box="1,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state name="AS_err_on">
+         <entry>display_write(&quot;Error!&quot;,CLOCK_SETTING_ERR_MSG_ROW,CLOCK_SETTING_ERR_MSG_COL );</entry>
+         <tran trig="TICK">
+          <action>++me-&gt;timeout;</action>
+          <choice target="../../../4">
+           <guard>me-&gt;timeout == 10</guard>
+           <action>me-&gt;timeout = 0;</action>
+           <choice_glyph conn="177,109,5,3,4">
+            <action box="1,0,10,2"/>
+           </choice_glyph>
+          </choice>
+          <tran_glyph conn="173,109,1,-1,4">
+           <action box="0,-2,10,2"/>
+          </tran_glyph>
+         </tran>
+         <state_glyph node="164,106,9,7">
+          <entry box="1,2,6,2"/>
+         </state_glyph>
+        </state>
+        <state name="AS_err_off">
+         <entry>display_erase_block(CLOCK_SETTING_ERR_MSG_ROW, CLOCK_SETTING_ERR_MSG_COL,CLOCK_SETTING_ERR_MSG_COL_END);</entry>
+         <tran trig="TICK">
+          <action>++me-&gt;timeout;</action>
+          <choice target="../../../3">
+           <guard>me-&gt;timeout == 10</guard>
+           <action>me-&gt;timeout = 0;</action>
+           <choice_glyph conn="178,104,5,0,-8,2">
+            <action box="1,0,10,2"/>
+           </choice_glyph>
+          </choice>
+          <tran_glyph conn="184,106,0,-1,-2,-6">
+           <action box="0,-2,10,2"/>
+          </tran_glyph>
+         </tran>
+         <state_glyph node="181,106,9,7">
+          <entry box="1,2,6,2"/>
+         </state_glyph>
+        </state>
+        <state_glyph node="160,100,31,16">
+         <entry box="1,2,6,2"/>
+         <exit box="1,4,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ASet_format">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL); //Setting cursor at the format place
+String msg[3] = {&quot;24H&quot;,&quot;AM &quot;,&quot;PM &quot;}; //Local string array that holds the format variables.
+display_write(msg[me-&gt;temp_format],CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL); //Display the current format to LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL);</entry>
+        <tran trig="SET">
+         <action>String msg;
+if(me-&gt;temp_format == FORMAT_24H){
+    me-&gt;temp_format = FORMAT_AM;
+    msg = &quot;AM &quot;;
+}
+else if(me-&gt;temp_format == FORMAT_AM){
+    me-&gt;temp_format = FORMAT_PM;
+    msg = &quot;PM &quot;;
+}
+else if (me-&gt;temp_format == FORMAT_PM){
+    me-&gt;temp_format = FORMAT_24H;
+    msg = &quot;24H&quot;;
+}
+display_write(msg,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL);
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL);</action>
+         <tran_glyph conn="128,109,3,-1,13">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK">
+         <choice target="../../../6">
+          <guard>is_time_set_error(me-&gt;temp_time, (time_format_t)me-&gt;temp_format) </guard>
+          <choice_glyph conn="153,112,5,3,7">
+           <action box="-7,2,14,2"/>
+          </choice_glyph>
+         </choice>
+         <choice target="../../../11">
+          <guard>else</guard>
+          <choice_glyph conn="153,112,4,3,-15,7,-7,6">
+           <action box="-4,-7,10,2"/>
+          </choice_glyph>
+         </choice>
+         <tran_glyph conn="145,112,1,-1,8">
+          <action box="0,-3,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="128,100,17,16">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ASet_hour_d2">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_HOUR_D2_COL);
+me-&gt;temp_digit = DIGIT2(GET_HOUR(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 10; //This digit can be 0,1,2,3 ..... 9.
+me-&gt;temp_time -=  DIGIT2(GET_HOUR(me-&gt;temp_time)) * 3600UL; // Updating temporary time, 1st place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 3600UL; // Updating temporary time, 1st place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_HOUR_D2_COL); // Updating Cursor bring back to hour D1 place</action>
+         <tran_glyph conn="98,87,3,-1,11">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../9">
+         <tran_glyph conn="113,83,1,3,5">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="98,78,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ASet_min_d1">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_MIN_D1_COL);
+me-&gt;temp_digit = DIGIT1(GET_MIN(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 6; //This digit can be 0,1,2,3,4,5 .
+me-&gt;temp_time -=  DIGIT1(GET_MIN(me-&gt;temp_time)) * 10UL * 3600UL; // Updating temporary time, 10th place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 10UL  * 3600UL; // Updating temporary time, 10th place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_MIN_D1_COL); // Updating Cursor bring back to minute D1 place</action>
+         <tran_glyph conn="118,87,3,-1,12">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../10">
+         <tran_glyph conn="133,83,1,3,5">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="118,78,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ASet_min_d2">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_MIN_D2_COL);
+me-&gt;temp_digit = DIGIT2(GET_MIN(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 10; //This digit can be 0,1,2,3 ..... 9.
+me-&gt;temp_time -=  DIGIT2(GET_MIN(me-&gt;temp_time)) * 3600UL; // Updating temporary time, 1st place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 3600UL; // Updating temporary time, 1st place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_MIN_D2_COL); // Updating Cursor bring back to minute D2 place</action>
+         <tran_glyph conn="138,87,3,-1,13">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../3">
+         <tran_glyph conn="154,83,1,3,2,10,-80,12,4">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="138,78,16,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="Alarm_OnOff">
+        <entry>display_erase_block(ALARM_SETTING_STATUS_ROW,0,15);
+me-&gt;temp_digit = 0U;
+display_write(&quot;ALARM OFF&quot;,ALARM_SETTING_STATUS_ROW,ALARM_SETTING_STATUS_COL);
+display_set_cursor(ALARM_SETTING_STATUS_ROW,ALARM_SETTING_STATUS_COL);</entry>
+        <tran trig="SET">
+         <action>if(me-&gt;temp_digit){
+    display_write(&quot;ALARM OFF&quot;,ALARM_SETTING_STATUS_ROW,ALARM_SETTING_STATUS_COL);
+    me-&gt;temp_digit = 0;
+}else{
+    display_write(&quot;ALARM ON &quot;,ALARM_SETTING_STATUS_ROW,ALARM_SETTING_STATUS_COL);
+    me-&gt;temp_digit = 1;
+}
+display_set_cursor(ALARM_SETTING_STATUS_ROW,ALARM_SETTING_STATUS_COL);</action>
+         <tran_glyph conn="166,86,3,-1,9">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="166,78,19,15">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state_glyph node="71,72,122,55">
+        <entry box="1,2,6,2"/>
+       </state_glyph>
+      </state>
+      <state name="Clock_Setting">
+       <entry>Alarm_Clock_display_clock_setting_time(me, CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_COL);
+display_cursor_on_blinkon();</entry>
+       <initial target="../6">
+        <initial_glyph conn="75,19,4,3,6,4">
+         <action box="-1,-2,10,2"/>
+        </initial_glyph>
+       </initial>
+       <tran trig="OK">
+        <action>if(me-&gt;temp_format != FORMAT_24H){
+    me-&gt;temp_time = convert_12hformat_to_24h( me-&gt;temp_time,(time_format_t)me-&gt;temp_format);
+    me-&gt;time_mode = MODE_12H;
+}else{
+    me-&gt;time_mode = MODE_24H;
+}
+me-&gt;temp_time *= 10UL; //converting temp_time to number of 100 milisecond format
+Alarm_Clock_set_curr_time(me-&gt;temp_time); //This is the operation </action>
+        <choice>
+         <guard>0</guard>
+         <choice_glyph conn="82,56,5,-1,8">
+          <action box="1,0,10,2"/>
+         </choice_glyph>
+        </choice>
+        <tran_glyph conn="71,56,3,-1,11">
+         <action box="0,-2,10,2"/>
+        </tran_glyph>
+       </tran>
+       <state name="ClkSet_hour_d2">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_HOUR_D2_COL);
+me-&gt;temp_digit = DIGIT2(GET_HOUR(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 10; //This digit can be 0,1,2,3 ..... 9.
+me-&gt;temp_time -=  DIGIT2(GET_HOUR(me-&gt;temp_time)) * 3600UL; // Updating temporary time, 1st place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 3600UL; // Updating temporary time, 1st place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_HOUR_D2_COL); // Updating Cursor bring back to hour D1 place</action>
+         <tran_glyph conn="100,29,3,-1,11">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../7">
+         <tran_glyph conn="115,25,1,3,7">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="100,20,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ClkSet_min_d2">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_MIN_D2_COL);
+me-&gt;temp_digit = DIGIT2(GET_MIN(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 10; //This digit can be 0,1,2,3 ..... 9.
+me-&gt;temp_time -=  DIGIT2(GET_MIN(me-&gt;temp_time)) * 3600UL; // Updating temporary time, 1st place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 3600UL; // Updating temporary time, 1st place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_MIN_D2_COL); // Updating Cursor bring back to minute D2 place</action>
+         <tran_glyph conn="145,29,3,-1,13">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../9">
+         <tran_glyph conn="161,25,1,3,4,11,-90,7,4">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="145,20,16,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ClkSet_format">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL); //Setting cursor at the format place
+String msg[3] = {&quot;24H&quot;,&quot;AM &quot;,&quot;PM &quot;}; //Local string array that holds the format variables.
+display_write(msg[me-&gt;temp_format],CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL); //Display the current format to LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL);</entry>
+        <tran trig="SET">
+         <action>String msg;
+if(me-&gt;temp_format == FORMAT_24H){
+    me-&gt;temp_format = FORMAT_AM;
+    msg = &quot;AM &quot;;
+}
+else if(me-&gt;temp_format == FORMAT_AM){
+    me-&gt;temp_format = FORMAT_PM;
+    msg = &quot;PM &quot;;
+}
+else if (me-&gt;temp_format == FORMAT_PM){
+    me-&gt;temp_format = FORMAT_24H;
+    msg = &quot;24H&quot;;
+}
+display_write(msg,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL);
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_FMT_COL);</action>
+         <tran_glyph conn="126,48,3,-1,13">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK">
+         <choice target="../../../8">
+          <guard>is_time_set_error(me-&gt;temp_time, (time_format_t)me-&gt;temp_format) </guard>
+          <choice_glyph conn="151,51,5,3,4">
+           <action box="-2,2,14,2"/>
+          </choice_glyph>
+         </choice>
+         <tran_glyph conn="143,51,1,-1,8">
+          <action box="0,-3,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="126,39,17,14">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ClkSet_sec_d2">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_SEC_D2_COL);
+me-&gt;temp_digit = DIGIT2(GET_SEC(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 10; //This digit can be 0,1,2,3 ..... 9.
+me-&gt;temp_time -=  DIGIT2(GET_SEC(me-&gt;temp_time)) * 3600UL; // Updating temporary time, 1st place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 3600UL; // Updating temporary time, 1st place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_SEC_D2_COL); // Updating Cursor bring back to second D2 place</action>
+         <tran_glyph conn="100,48,3,-1,12">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../4">
+         <tran_glyph conn="115,43,1,3,11">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="100,39,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ClkSet_hour_d1">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_HOUR_D1_COL);
+me-&gt;temp_digit = DIGIT1(GET_HOUR(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 3; //This digit can be 0,1 or 2.
+me-&gt;temp_time -=  DIGIT1(GET_HOUR(me-&gt;temp_time)) * 10UL * 3600UL; // Updating temporary time, 10th place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 10UL  * 3600UL; // Updating temporary time, 10th place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_HOUR_D1_COL); // Updating Cursor bring back to hour D1 place</action>
+         <tran_glyph conn="79,29,3,-1,11">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../2">
+         <tran_glyph conn="94,25,1,3,6">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="79,20,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ClkSet_min_d1">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_MIN_D1_COL);
+me-&gt;temp_digit = DIGIT1(GET_MIN(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 6; //This digit can be 0,1,2,3,4,5 .
+me-&gt;temp_time -=  DIGIT1(GET_MIN(me-&gt;temp_time)) * 10UL * 3600UL; // Updating temporary time, 10th place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 10UL  * 3600UL; // Updating temporary time, 10th place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_MIN_D1_COL); // Updating Cursor bring back to minute D1 place</action>
+         <tran_glyph conn="122,29,3,-1,12">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../3">
+         <tran_glyph conn="137,25,1,3,8">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="122,20,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ClkSet_error">
+        <entry>display_cursor_off_blinkoff();</entry>
+        <exit>display_erase_block(CLOCK_SETTING_ERR_MSG_ROW, CLOCK_SETTING_ERR_MSG_COL,CLOCK_SETTING_ERR_MSG_COL_END);
+me-&gt;timeout = 0;</exit>
+        <initial target="../3">
+         <initial_glyph conn="157,46,4,3,3,2">
+          <action box="0,-2,10,2"/>
+         </initial_glyph>
+        </initial>
+        <tran trig="SET" target="../..">
+         <action>display_cursor_on_blinkon();</action>
+         <tran_glyph conn="178,39,0,0,-25">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK">
+         <tran_glyph conn="169,53,2,-1,-2">
+          <action box="1,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state name="err_on">
+         <entry>display_write(&quot;Error!&quot;,CLOCK_SETTING_ERR_MSG_ROW,CLOCK_SETTING_ERR_MSG_COL );</entry>
+         <tran trig="TICK">
+          <action>++me-&gt;timeout;</action>
+          <choice target="../../../4">
+           <guard>me-&gt;timeout == 10</guard>
+           <action>me-&gt;timeout = 0;</action>
+           <choice_glyph conn="171,48,5,3,4">
+            <action box="1,0,10,2"/>
+           </choice_glyph>
+          </choice>
+          <tran_glyph conn="166,48,1,-1,5">
+           <action box="0,-2,10,2"/>
+          </tran_glyph>
+         </tran>
+         <state_glyph node="159,45,7,7">
+          <entry box="1,2,6,2"/>
+         </state_glyph>
+        </state>
+        <state name="err_off">
+         <entry>display_erase_block(CLOCK_SETTING_ERR_MSG_ROW, CLOCK_SETTING_ERR_MSG_COL,CLOCK_SETTING_ERR_MSG_COL_END);</entry>
+         <tran trig="TICK">
+          <action>++me-&gt;timeout;</action>
+          <choice target="../../../3">
+           <guard>me-&gt;timeout == 10</guard>
+           <action>me-&gt;timeout = 0;</action>
+           <choice_glyph conn="172,43,5,0,-8,2">
+            <action box="1,0,10,2"/>
+           </choice_glyph>
+          </choice>
+          <tran_glyph conn="178,45,0,-1,-2,-6">
+           <action box="0,-2,10,2"/>
+          </tran_glyph>
+         </tran>
+         <state_glyph node="175,45,7,7">
+          <entry box="1,2,6,2"/>
+         </state_glyph>
+        </state>
+        <state_glyph node="155,39,28,14">
+         <entry box="1,2,6,2"/>
+         <exit box="1,4,6,2"/>
+        </state_glyph>
+       </state>
+       <state name="ClkSet_sec_d1">
+        <entry>display_set_cursor(CLOCK_SETTING_TIME_ROW, CLOCK_SETTING_TIME_SEC_D1_COL);
+me-&gt;temp_digit = DIGIT1(GET_SEC(me-&gt;temp_time));</entry>
+        <tran trig="SET">
+         <action>++me-&gt;temp_digit; //Every time pressed button SET, it will increment the digit
+me-&gt;temp_digit %= 6; //This digit can be 0,1,2,3,4,5 .
+me-&gt;temp_time -=  DIGIT1(GET_SEC(me-&gt;temp_time)) * 10UL * 3600UL; // Updating temporary time, 10th place and milisec
+me-&gt;temp_time +=  me-&gt;temp_digit * 10UL  * 3600UL; // Updating temporary time, 10th place and milisec
+Alarm_Clock_display_clock_setting_time(me,CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_COL); // Display the time as string in LCD
+display_set_cursor(CLOCK_SETTING_TIME_ROW,CLOCK_SETTING_TIME_SEC_D1_COL); // Updating Cursor bring back to second D1 place</action>
+         <tran_glyph conn="79,48,3,-1,11">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <tran trig="OK" target="../../5">
+         <tran_glyph conn="94,43,1,3,6">
+          <action box="0,-2,10,2"/>
+         </tran_glyph>
+        </tran>
+        <state_glyph node="79,39,15,12">
+         <entry box="1,2,6,2"/>
+        </state_glyph>
+       </state>
+       <state_glyph node="71,14,122,48">
+        <entry box="1,2,6,2"/>
+       </state_glyph>
+      </state>
+      <state_glyph node="59,8,138,123">
+       <exit box="1,2,6,2"/>
+      </state_glyph>
+     </state>
+     <state name="Ticking">
+      <entry brief="display the current time">Alarm_Clock_display_curr_time(me, TICKING_CURR_TIME_ROW, TICKING_CURR_TIME_COL );</entry>
+      <exit>display_clear();</exit>
+      <tran trig="SET" target="../../2/3">
+       <action>me-&gt;temp_time = Alarm_Clock_get_curr_time()/10;
+if(me-&gt;time_mode == MODE_12H){
+    if(get_am_or_pm(me-&gt;temp_time).equals(&quot;AM&quot;)){
+        me-&gt;temp_format = FORMAT_AM;
+    }
+    else{
+        me-&gt;temp_format = FORMAT_PM;
+    }
+    me-&gt;temp_time = convert_24hformat_to_12h(me-&gt;temp_time);
+}
+else
+    me-&gt;temp_format = FORMAT_24H;</action>
+       <tran_glyph conn="50,23,1,3,21">
+        <action box="0,-2,10,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="OK" target="../../2/2">
+       <tran_glyph conn="50,31,1,3,17,54,4">
+        <action box="0,-2,10,2"/>
+       </tran_glyph>
+      </tran>
+      <tran trig="TICK">
+       <action brief="Initial Transition">Alarm_Clock_display_curr_time(me, TICKING_CURR_TIME_ROW, TICKING_CURR_TIME_COL );</action>
+       <tran_glyph conn="17,29,3,-1,20,2">
+        <action box="0,-2,8,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="17,18,33,24">
+       <entry box="1,2,5,2"/>
+       <exit box="1,4,6,2"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="13,2,187,136"/>
+    </state>
+    <state name="Alarm_Reminder">
+     <entry>me-&gt;timeout = 0;</entry>
+     <exit>display_clear();</exit>
+     <initial target="../3">
+      <initial_glyph conn="78,181,4,3,8,4">
+       <action box="0,-2,10,2"/>
+      </initial_glyph>
+     </initial>
+     <tran trig="OK" target="../../1" cpref="../../1/0">
+      <tran_glyph conn="68,177,3,2,-39,-38">
+       <action box="0,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <tran trig="TICK">
+      <action>Alarm_Clock_display_curr_time(me,ALARM_SETTING_CURR_TIME_ROW,ALARM_SETTING_CURR_TIME_COL);</action>
+      <choice target="../../../1/3">
+       <guard>++me-&gt;alarm_timeout == 200</guard>
+       <action>me-&gt;alarm_timeout = 0;</action>
+       <choice_glyph conn="53,197,5,2,-32,-155">
+        <action box="1,0,10,2"/>
+       </choice_glyph>
+      </choice>
+      <tran_glyph conn="68,197,3,-1,-15">
+       <action box="0,-2,10,2"/>
+      </tran_glyph>
+     </tran>
+     <state name="Alarm_Msg_ON">
+      <entry>display_write(&quot;*ALARM*&quot;,ALARM_REMINDER_MSG_ROW,ALARM_REMINDER_MSG_COL);</entry>
+      <tran trig="TICK">
+       <action>me-&gt;timeout++;</action>
+       <choice target="../../../4">
+        <guard>me-&gt;timeout == 10</guard>
+        <action>me-&gt;timeout = 0;</action>
+        <choice_glyph conn="115,184,5,3,14">
+         <action box="1,0,10,2"/>
+        </choice_glyph>
+       </choice>
+       <tran_glyph conn="105,184,1,-1,10">
+        <action box="0,-2,10,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="82,175,23,18">
+       <entry box="1,2,6,2"/>
+      </state_glyph>
+     </state>
+     <state name="Alarm_Msg_OFF">
+      <entry>display_erase_block(ALARM_REMINDER_MSG_ROW,ALARM_REMINDER_MSG_COL,10);</entry>
+      <tran trig="TICK">
+       <action>me-&gt;timeout++;</action>
+       <choice target="../../../3">
+        <guard>me-&gt;timeout == 10</guard>
+        <action>me-&gt;timeout = 0;</action>
+        <choice_glyph conn="124,170,5,0,-26,5">
+         <action box="1,0,10,2"/>
+        </choice_glyph>
+       </choice>
+       <tran_glyph conn="138,175,0,-1,-5,-14">
+        <action box="0,-6,10,2"/>
+       </tran_glyph>
+      </tran>
+      <state_glyph node="129,175,22,18">
+       <entry box="1,2,6,2"/>
+      </state_glyph>
+     </state>
+     <state_glyph node="68,159,91,48">
+      <entry box="1,2,6,2"/>
+      <exit box="1,4,6,2"/>
+     </state_glyph>
+    </state>
+    <state_diagram size="247,235"/>
+   </statechart>
+  </class>
+  <directory name="../src">
+   <file name="AlarmClock_HSM.cpp">
+    <text>#include &lt;Arduino.h&gt;
+#include &quot;qpn.h&quot;
+#include &quot;lcd.h&quot;
+#include &quot;AlarmClock_HSM.h&quot;
+
+$declare${HSMs::Alarm_Clock}
+$define${HSMs::super_AlarmClock}
+
+//Prototypes of helper functions
+String get_am_or_pm(uint32_t time24h);
+void display_write(String str_, uint8_t r, uint8_t c);
+String integertime_to_string(uint32_t time_);
+uint32_t convert_12hformat_to_24h(uint32_t time12h, time_format_t ampm);
+uint32_t convert_24hformat_to_12h(uint32_t time24h);
+void display_cursor_on_blinkon(void);
+void display_cursor_off_blinkoff();
+void display_set_cursor(uint8_t r, uint8_t c);
+void display_clear(void);
+bool is_time_set_error(uint32_t time_, time_format_t format);
+void display_erase_block(uint8_t row,uint8_t col_start,uint8_t col_stop);
+
+$define${HSMs::Alarm_Clock_ctor}
+$define${HSMs::Alarm_Clock}
+
+
+
+
+ISR(TIMER1_COMPA_vect){
+    Alarm_Clock_update_curr_time();
+
+}
+
+
+/*
+ * Description : Decodes AM/PM information from given time in 24H format
+ * param1: Integer time in 24H format
+ * return : A string value(&quot;AM&quot; or &quot;PM&quot;)
+ */
+String get_am_or_pm(uint32_t time24h){
+    String ampm;
+    uint8_t h = GET_HOUR(time24h);
+    if(h == 0U){
+        ampm = &quot;AM&quot;;
+    }else if( h &gt; 12U){
+        ampm = &quot;PM&quot;;
+    }else if (h == 12U)
+        ampm = &quot;PM&quot;;
+    else
+        ampm = &quot;AM&quot;;
+    return ampm;
+}
+
+/*
+ * Description: Writes a message to the LCD at given row and column number
+ * param1 : Message to write in 'String' format
+ * param2 : row number of the LCD
+ * param2 : column number of the LCD
+ */
+void  display_write(String str_, uint8_t r, uint8_t c){
+    lcd_set_cursor(c,r);
+    lcd_print_string(str_);
+}
+
+/*
+ * Description: converts an 'integer' time to 'String' time
+ * param1 : time represented in terms of number of seconds
+ * return : time as 'String' value in the format HH:MM:SS
+ */
+String integertime_to_string(uint32_t time_){
+    uint8_t h,m,s;
+    char buf[10]; //00:00:00+null
+    h = GET_HOUR(time_); /* Extract how many hours the 'time_' represent */
+    m = GET_MIN(time_);  /* Extract how many minutes the 'time_' represent */
+    s = GET_SEC(time_);     /* Extract how many seconds the 'time_' represent */
+    sprintf(buf,&quot;%02d:%02d:%02d&quot;,h,m,s);
+    return (String)buf;
+}
+
+/*
+ * Description: Converts given integer time in 12H format to integer time 24H format
+ * param1 : Integer time in 12H format
+ * param2 : time format of type time_format_t
+ * return : Integer time in 24H format
+ */
+uint32_t convert_12hformat_to_24h(uint32_t time12h, time_format_t ampm){
+    uint8_t hour;
+    uint32_t time24h;
+    hour = GET_HOUR(time12h);
+    if(ampm == FORMAT_AM){
+        time24h = (hour == 12)? (time12h-(12UL * 3600UL)) : time12h;
+    }else{
+        time24h = (hour == 12)? time12h : (time12h +(12UL * 3600UL));
+    }
+    return time24h;
+}
+
+/*
+ * Description: Converts given integer time in 24H format to integer time 12H format
+ * param1 : Integer time in 24H format
+ * return : Integer time in 12H format
+ */
+uint32_t convert_24hformat_to_12h(uint32_t time24h){
+    uint8_t hour;
+    uint32_t time12h;
+    hour = GET_HOUR(time24h);
+
+    if(hour == 0)
+        time12h = time24h + (12UL * 3600UL);
+    else{
+        if((hour &lt; 12UL) || (hour == 12UL))
+            return time24h;
+        else
+            time12h = time24h - (12UL * 3600UL);
+    }
+    return time12h;
+}
+
+
+void display_cursor_on_blinkon(){
+    lcd_cursor_show();
+    lcd_cursor_blink();
+}
+
+void display_cursor_off_blinkoff(){
+    lcd_cursor_off();
+    lcd_cursor_blinkoff();
+}
+
+
+void display_set_cursor(uint8_t r, uint8_t c){
+     lcd_set_cursor(c,r);
+}
+
+void display_clear(void){
+    lcd_clear();
+}
+
+//This function used in the error parts and check the time set is ok or not.
+bool is_time_set_error(uint32_t time_,time_format_t format){
+    uint8_t h = GET_HOUR(time_);
+    return ((h &gt; 23) || ((h &gt; 12 || (h == 0))&amp;&amp; format != FORMAT_24H) );
+}
+
+
+//This function makes empty the desired places in the LCD
+void display_erase_block(uint8_t row,uint8_t col_start,uint8_t col_stop)
+{
+    uint8_t len = col_stop - col_start;
+    do{
+        lcd_set_cursor(col_start++,row);
+        lcd_print_char(' ');
+    }while(len--);
+}
+
+
+</text>
+   </file>
+   <file name="AlarmClock_HSM.h">
+    <text>#ifndef ALARM_CLOCK_H
+#define ALARM_CLOCK_H
+
+
+enum AlarmClock_Signals{
+    SET_SIG = Q_USER_SIG,
+    OK_SIG,
+    CANCEL_SIG,
+    ALARM_SIG,
+    TICK_SIG,
+    IGNORE_SIG,
+    MAX_SIG
+};
+
+
+enum time_mode{
+    MODE_24H,
+    MODE_12H
+};
+
+enum alarm_status{
+    ALARM_OFF,
+    ALARM_ON
+};
+
+typedef enum time_format{
+    FORMAT_24H,
+    FORMAT_AM,
+    FORMAT_PM
+}time_format_t;
+
+//Helper MACROs to get time in different formats, hh/mm/ss format
+#define GET_HOUR(seconds)     (seconds/3600UL)
+#define GET_MIN(seconds)      ((seconds/60UL)%60UL)
+#define GET_SEC(seconds)      (seconds % 60UL)
+#define DIGIT1(d)             (d/10U)
+#define DIGIT2(d)             (d%10U)
+
+
+#define MAX_TIME (864000UL) //24*3600*10 = Every 100ms
+#define INITIAL_CURR_TIME  ((9UL * 3600UL + 5UL * 60UL) * 10UL) // 09:05:00 (Represented 24H format)
+#define INITIAL_ALARM_TIME  (7UL * 3600UL) // 07:00:00  (Represented 24H format)
+
+
+//These MACROS show the row and column places in LCD with the names below indicated STATEs firstly.
+#define TICKING_CURR_TIME_ROW  0 
+#define TICKING_CURR_TIME_COL  3
+#define CLOCK_SETTING_TIME_ROW 0
+#define CLOCK_SETTING_TIME_COL 2
+#define CLOCK_SETTING_TIME_HOUR_D1_COL 2
+#define CLOCK_SETTING_TIME_HOUR_D2_COL 3
+#define CLOCK_SETTING_TIME_MIN_D1_COL 5
+#define CLOCK_SETTING_TIME_MIN_D2_COL 6
+#define CLOCK_SETTING_TIME_SEC_D1_COL 8
+#define CLOCK_SETTING_TIME_SEC_D2_COL 9
+#define CLOCK_SETTING_TIME_FMT_COL     11
+#define CLOCK_SETTING_ERR_MSG_ROW 1 //Where the &quot;Error!&quot; written 
+#define CLOCK_SETTING_ERR_MSG_COL  4
+#define CLOCK_SETTING_ERR_MSG_COL_END 9
+
+#define ALARM_SETTING_CURR_TIME_ROW 1
+#define ALARM_SETTING_CURR_TIME_COL  2
+#define ALARM_SETTING_STATUS_ROW 0
+#define ALARM_SETTING_STATUS_COL  4
+#define ALARM_REMINDER_MSG_ROW 0
+#define ALARM_REMINDER_MSG_COL 4
+
+#define CS_ROW 0
+#define CS_HOUR_D1_COL  2
+
+$declare${HSMs::Alarm_Clock_ctor}
+$declare${HSMs::super_AlarmClock}
+
+
+
+#endif</text>
+   </file>
+  </directory>
+  <operation name="Alarm_Clock_ctor" type="void" visibility="0x00" properties="0x00">
+   <code>QHsm_ctor(&amp;Alarm_Clock_obj.super, Q_STATE_CAST(&amp;Alarm_Clock_initial));</code>
+  </operation>
+  <attribute name="super_AlarmClock" type="QHsm *const" visibility="0x00" properties="0x00">
+   <code>= &amp;Alarm_Clock_obj.super;</code>
+  </attribute>
+ </package>
+</model>
