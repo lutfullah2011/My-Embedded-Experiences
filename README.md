@@ -8,8 +8,12 @@
 (30.11.2022) - (30.04.2023) ~= 250 saat emek verildi.   Çalışmaya devam...
 
 
-*Bütün uygulamalarım esnasında STM32VL DISCOVERY kart ve bazılarında ARDUINO UNO kart kullanıldı.                                                                                                                                                                                                                                                                     
-*Uygulamalar ilk başta KEIL IDE ,sonrasında STM32CUBE IDE ve VISUAL STUDIO CODE ile gerçekleştirildi.                                                                                                                                                                                                                                                                                                                                     
+*Bütün uygulamalarım esnasında STM32VL DISCOVERY kart ve bazılarında ARDUINO UNO kart kullanıldı.
+*Uygulamalar ilk başta KEIL IDE ,sonrasında STM32CUBE IDE ve VISUAL STUDIO CODE ile gerçekleştirildi.
+
+                                                                                                                                                                                 
+                                                                                                                                                                                
+                                                                                                                                                                        
 *Kariyer.net techcareer aracılığı ile 45 saat Aykut Taşdelen anlatımıyla online Embedded Bootcamp eğitimi alıp proje tamamladım.                                        (24.10.2022 - 18.11.2022) https://github.com/lutfullah2011/Embedded-Bootcamp-Project.git                                                                                          
 
 *UDEMY ile 28.5 saatlik "Mastering Microcontroller and Embedded Driver Development" kursunu başarıyla tamamladım.Eğitime ve uygulamaya devam(26.03.2023)                https://www.udemy.com/course/mastering-microcontroller-with-peripheral-driver-development/  
