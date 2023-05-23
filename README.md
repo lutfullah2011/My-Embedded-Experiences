@@ -9,6 +9,7 @@
 
 
 *Bütün uygulamalarım esnasında STM32VL DISCOVERY kart ve bazılarında ARDUINO UNO kart kullanıldı.
+
 *Uygulamalar ilk başta KEIL IDE ,sonrasında STM32CUBE IDE ve VISUAL STUDIO CODE ile gerçekleştirildi.
 
                                                                                                                                                                                  
