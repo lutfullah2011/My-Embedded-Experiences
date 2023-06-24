@@ -2,10 +2,10 @@
 
 ***********************************************************************************************************************************************************************
 
-*7 Temmuz 2022'de başlayıp, yaklaşık 10 ayda +800 saat Gömülü sistemler, C Programlama, ARM-STM32 hakkında  online ve bootcamp eğitimi aldım.              
+*Yaklaşık 11 ayda +850 saat Gömülü sistemler, C Programlama, ARM-STM32 hakkında  online ve bootcamp eğitimi aldım.              
 (07.07.2022) - (20.08.2022) ~= 100 saat emek verildi.                                                                                                                    
 (20.08.2022) - (20.11.2022) ~= 450 saat emek verildi.                                                                                                                                                                                                                                                                  
-(30.11.2022) - (31.05.2023) ~= 280 saat emek verildi.   Çalışmaya devam...
+(30.11.2022) - (24.06.2023) ~= 300 saat emek verildi.   Çalışmaya devam...
 
 
 *Bütün uygulamalarım esnasında STM32VL DISCOVERY kart ve bazılarında ARDUINO UNO kart kullanıldı.
