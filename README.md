@@ -17,7 +17,7 @@ Portföyüm için: https://bionluk.com/portfolyo/lutfullah_aydn
 
 ***********************************************************************************************************************************************************************
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                                                                                                                                                                                                                                                                                                                                                                    
-GÖMÜLÜ SİSTEMLER EĞİTİM VE SERTİFİKALAR
+GÖMÜLÜ SİSTEMLER EĞİTİM VE SERTİFİKALAR                                                                                                                                                                                                                                                                                                                                                                                                    
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 ***********************************************************************************************************************************************************************
 *UDEMY ile 12 saatlik "Embedded System Design using UML State Machines" kursunu başarıyla tamamladım.                                                                  https://www.udemy.com/course/embedded-system-design-using-uml-state-machines/ 
@@ -33,7 +33,8 @@ GÖMÜLÜ SİSTEMLER EĞİTİM VE SERTİFİKALAR
 https://www.udemy.com/course/stm32f-ile-adan-zye-gomulu-sistemler-embedded-systems/
 
 
-*Coşkun Taşdemir Youtube "ARM Programlama Temelleri" eğitim serisi (4 Saat civarı)                                                                                      https://www.youtube.com/watch?v=zVzIkYe9Y_Y&list=PLmkV2uU8kdpJiFKCq_j0Yz7s66muPd0sf
+*Coşkun Taşdemir Youtube "ARM Programlama Temelleri" eğitim serisi (4 Saat civarı)                                                                                                      
+                                                                                                                                                                        https://www.youtube.com/watch?v=zVzIkYe9Y_Y&list=PLmkV2uU8kdpJiFKCq_j0Yz7s66muPd0sf
 
 *Coşkun Taşdemir Youtube "STM32" eğitim serisi (10 Saat civarı)                                                                                                         https://www.youtube.com/watch?v=XYDGY45UYk4&list=PLmkV2uU8kdpLmB7QYE_3rGhwU1258xSbj
 
